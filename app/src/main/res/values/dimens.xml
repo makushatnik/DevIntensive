@@ -5,15 +5,11 @@
 
     <!-- Sizes -->
 
-    <dimen name="size_smallest_16">16dp</dimen>
     <dimen name="size_small_24">24dp</dimen>
-    <dimen name="size_medium_32">32dp</dimen>
-    <dimen name="size_vertical_center_52">52dp</dimen>
-    <dimen name="size_large_56">56dp</dimen>
-    <dimen name="size_larger_72">72dp</dimen>
-    <dimen name="size_great_large_80">80dp</dimen>
-    <dimen name="size_nav_left_96">96dp</dimen>
-    <dimen name="size_great_larger_104">104dp</dimen>
+    <dimen name="size_medium_56">56dp</dimen>
+    <dimen name="size_large_72">72dp</dimen>
+    <dimen name="size_large_92">92dp</dimen>
+    <dimen name="size_extra_large_112">112dp</dimen>
 
     <!-- Spaces -->
     
@@ -21,10 +17,14 @@
     <dimen name="spacing_normal_16">16dp</dimen>
     <dimen name="spacing_medial_24">24dp</dimen>
     <dimen name="spacing_medium_32">32dp</dimen>
-    <dimen name="spacing_almost_large_48">48dp</dimen>
     <dimen name="spacing_large_56">56dp</dimen>
-    <dimen name="spacing_large_for_list_64">64dp</dimen>
     <dimen name="spacing_larger_72">72dp</dimen>
-    <dimen name="spacing_large_title_80">80dp</dimen>
+    <dimen name="fab_right_space">8dp</dimen>
 
+    <dimen name="profile_image_size">256dp</dimen>
+    
+    <dimen name="line_size">1dp</dimen>
+    <dimen name="zero_spacing">0dp</dimen>
+
+    <dimen name="main_app_name">32sp</dimen>
 </resources>
