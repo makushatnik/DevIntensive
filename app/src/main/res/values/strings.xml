@@ -3,4 +3,14 @@
 
     <string name="hello_world">Hello DevIntensive!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="user_profile.placeholder.image">Изменить фотографию профиля?</string>
+    <string name="user_profile_dialog.title">Изменить фотографию профиля</string>
+    <string name="user_profile_dialog.gallery">Загрузить из галереи</string>
+    <string name="user_profile_dialog.camera">Сделать снимок</string>
+    <string name="user_profile_dialog.cancel">Отмена</string>
+    <string name="user_profile_chose_message">Выберите фото</string>
+
+    <string name="need_a_permission_title">Для корректной работы необходимо дать требуемые разрешения</string>
+    <string name="give_a_permission">Разрешить</string>
 </resources>

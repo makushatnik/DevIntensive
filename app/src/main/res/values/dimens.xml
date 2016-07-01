@@ -27,4 +27,5 @@
     <dimen name="zero_spacing">0dp</dimen>
 
     <dimen name="main_app_name">32sp</dimen>
+    <dimen name="placeholder_photo_size_90">90sp</dimen>
 </resources>
