@@ -1,5 +1,6 @@
 package com.softdesign.devintensive.ui.activities;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -37,6 +38,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
@@ -80,6 +82,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private File mPhotoFile = null;
     private Uri mSelectedImage = null;
 
+    private int mGranted = PackageManager.PERMISSION_GRANTED;
+
+    private ImageView mCallIv, mEmailIv, mSendIv, mVkIv, mVkVisibleIv, mGithubIv, mGithubVisibleIv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +125,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         //mAvatar = (ImageView) mNavigationView.getHeaderView(0).findViewById(R.id.user_avatar);
         RoundedAvatarDrawable rad = new RoundedAvatarDrawable(mAvatar.getDrawingCache());
         mAvatar.setBackground(new BitmapDrawable(getResources(), rad.getBitmap()));
+
+        mCallIv = (ImageView) findViewById(R.id.call_iv);
+        mEmailIv = (ImageView) findViewById(R.id.email_iv);
+        mSendIv = (ImageView) findViewById(R.id.send_iv);
+        mVkIv = (ImageView) findViewById(R.id.vk_iv);
+        mVkVisibleIv = (ImageView) findViewById(R.id.vk_visible_iv);
+        mGithubIv = (ImageView) findViewById(R.id.github_iv);
+        mGithubVisibleIv = (ImageView) findViewById(R.id.github_visible_iv);
+
+        mCallIv.setOnClickListener(this);
+        mEmailIv.setOnClickListener(this);
+        mVkIv.setOnClickListener(this);
+        mGithubIv.setOnClickListener(this);
 
         mUserPhone = (EditText) findViewById(R.id.phone_et);
         mUserMail = (EditText) findViewById(R.id.email_et);
@@ -202,6 +221,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.call_img:
                 showProgress();
                 runWithDelay();
+                dialNumber();
                 break;
             case R.id.floating_ab:
                 showSnackbar("Click");
@@ -216,6 +236,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.appbar_layout:
                 // TODO: 01.07.2016 сделать выбор откуда загружать фото
                 showDialog(ConstantManager.LOAD_PROFILE_PHOTO);
+                break;
+            case R.id.call_iv:
+                dialNumber();
+                break;
+            case R.id.email_iv:
+                sendEmailMessage();
+                break;
+            case R.id.vk_iv:
+                openVK();
+                break;
+            case R.id.github_iv:
+                openGithub();
                 break;
         }
     }
@@ -312,6 +344,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 lockToolbar();
                 mCollapsingToolbar.setExpandedTitleColor(Color.TRANSPARENT);
             }
+            mUserPhone.requestFocus();
         } else {
             mFab.setImageResource(R.drawable.ic_done_black_24dp);
             for (EditText userValue : mUserInfoViews) {
@@ -323,7 +356,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 unlockToolbar();
                 mCollapsingToolbar.setExpandedTitleColor(getResources().getColor(R.color.white));
 
-                saveUserInfo();
+                if (validatePhone() && validateMail() && validateVk() && validateGithub()) {
+                    saveUserInfo();
+                }
             }
         }
     }
@@ -354,9 +389,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void loadPhotoFromCamera() {
-        int granted = PackageManager.PERMISSION_GRANTED;
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == granted &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == granted) {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == mGranted &&
+                ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == mGranted) {
             Intent takeCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             try {
                 mPhotoFile = createImageFile();
@@ -488,5 +522,120 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Uri.parse("packege:" + getPackageName()));
 
         startActivityForResult(appSettingsIntent, ConstantManager.PERMISSION_REQUEST_SETTINGS_CODE);
+    }
+
+    private String getPhoneNumber(String phone) {
+        phone = phone.replace("(","");
+        phone = phone.replace(")","");
+        phone = phone.replace("-","");
+
+        return phone;
+    }
+
+    public void dialNumber() {
+        String phone = mUserPhone.getText().toString().trim();
+        if (phone.isEmpty()) return;
+
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        phone = getPhoneNumber(phone);
+        intent.setData(Uri.parse("tel:" + phone));
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == mGranted) {
+                startActivity(intent);
+            }
+        }
+    }
+
+    public void sendEmailMessage() {
+        String emailAddress = mUserMail.getText().toString().trim().toLowerCase();
+        if (emailAddress.isEmpty()) return;
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Greetings");
+        intent.putExtra(Intent.EXTRA_TEXT, "Hello, it's DevIntensive\n2016" +
+                "\n\n" + getString(R.string.app_name));
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[] { emailAddress });
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(Intent.createChooser(intent, "SEND.MESSAGE"));
+        }
+    }
+
+    public void openVK() {
+        String vkAddress = mUserVK.getText().toString().trim().toLowerCase();
+        if (vkAddress.isEmpty()) return;
+
+        Uri address = Uri.parse("http://" + vkAddress);
+        Intent intent = new Intent(Intent.ACTION_VIEW, address);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+
+    public void openGithub() {
+        String gitAddress = mUserGit.getText().toString().trim().toLowerCase();
+        if (gitAddress.isEmpty()) return;
+
+        Uri address = Uri.parse("http://" + gitAddress);
+        Intent intent = new Intent(Intent.ACTION_VIEW, address);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+
+    private boolean validatePhone() {
+        String phone = mUserPhone.getText().toString().trim();
+        if (phone.isEmpty()) return false;
+
+        phone = getPhoneNumber(phone);
+        if (phone.length() < 11 || phone.length() > 20) return false;
+        return true;
+    }
+
+    private boolean validateMail() {
+        String email = mUserMail.getText().toString().trim().toLowerCase();
+        if (email.isEmpty()) return false;
+
+        int pos = email.indexOf("@");
+        if (pos < 2) return false;
+        email = email.substring(pos);
+
+        pos = email.indexOf(".");
+        if (pos < 1) return false;
+        email = email.substring(pos);
+
+        if (email.length() < 2) return false;
+        return true;
+    }
+
+    private boolean validateVk() {
+        String vkAddr = mUserVK.getText().toString().trim().toLowerCase();
+        if (vkAddr.isEmpty()) return false;
+
+        int pos = vkAddr.indexOf("https://");
+        if (pos > 0) return false;
+        else if (pos == 0) {
+            vkAddr = vkAddr.substring(8);
+            mUserVK.setText(vkAddr);
+        }
+        pos = vkAddr.indexOf("vk.com");
+        if (pos != -1) return false;
+        return true;
+    }
+
+    private boolean validateGithub() {
+        String gitAddr = mUserGit.getText().toString().trim().toLowerCase();
+        if (gitAddr.isEmpty()) return false;
+
+        int pos = gitAddr.indexOf("https://");
+        if (pos > 0) return false;
+        else if (pos == 0) {
+            gitAddr = gitAddr.substring(8);
+            mUserVK.setText(gitAddr);
+        }
+        pos = gitAddr.indexOf("github.com");
+        if (pos != -1) return false;
+        return true;
     }
 }

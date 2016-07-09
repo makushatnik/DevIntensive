@@ -13,4 +13,7 @@
 
     <string name="need_a_permission_title">Для корректной работы необходимо дать требуемые разрешения</string>
     <string name="give_a_permission">Разрешить</string>
+
+    <string name="enter">ВОЙТИ</string>
+    <string name="forget_password">Забыли пароль?</string>
 </resources>

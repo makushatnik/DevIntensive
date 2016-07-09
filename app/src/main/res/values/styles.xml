@@ -71,6 +71,24 @@
         <item name="android:layout_marginLeft">@dimen/spacing_larger_72</item>
     </style>
 
+    <style name="yellow_string">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/spacing_normal_16</item>
+        <item name="android:background">@color/light_yellow</item>
+    </style>
+
+    <style name="green_string">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/spacing_normal_16</item>
+        <item name="android:background">@color/color_accent</item>
+    </style>
+
+    <style name="pink_divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/line_size</item>
+        <item name="android:background">@color/primary_color_dark</item>
+    </style>
+
     <style name="vert_divider">
         <item name="android:layout_width">@dimen/line_size</item>
         <item name="android:layout_height">match_parent</item>
