@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/fill">
+
+    <LinearLayout
+        style="@style/main">
+
+        <LinearLayout
+            android:id="@+id/user_info_wrapper"
+            style="@style/user_info">
+
+            <LinearLayout
+                style="@style/vert_bar_block"
+                android:layout_weight="0.5">
+                <TextView
+                    android:id="@+id/numOfRate"
+                    style="@style/fill.text_view"
+                    android:text="5"/>
+                <TextView
+                    style="@style/fill.text_view"
+                    android:text="Рейтинг"/>
+            </LinearLayout>
+            <View
+                style="@style/vert_divider"/>
+            <LinearLayout
+                style="@style/vert_bar_block"
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/numOfStrings"
+                    style="@style/fill.text_view"
+                    android:text="5"/>
+                <TextView
+                    style="@style/fill.text_view"
+                    android:text="Написано строк кода"/>
+            </LinearLayout>
+            <View
+                style="@style/vert_divider"/>
+            <LinearLayout
+                style="@style/vert_bar_block"
+                android:layout_weight="0.5">
+                <TextView
+                    android:id="@+id/numOfProj"
+                    style="@style/fill.text_view"
+                    android:text="5"/>
+                <TextView
+                    style="@style/fill.text_view"
+                    android:text="Проектов"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/outer_string_block">
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/ic_call_black_24dp"/>
+            <LinearLayout
+                style="@style/string_block.elem">
+                <android.support.design.widget.TextInputLayout
+                    style="@style/fill">
+                    <EditText
+                        android:id="@+id/phone_et"
+                        style="@style/fill.edit_text"
+                        android:hint="Мобильный телефон"
+                        android:inputType="phone"
+                        android:text="+7(951)527-50-52"
+                        android:textStyle="bold"
+                        android:fontFamily="monospace"/>
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/call_img"
+                style="@style/icon.right"
+                android:src="@drawable/ic_phone_in_talk_black_24dp"/>
+        </LinearLayout>
+        <View
+            style="@style/horiz_divider"/>
+
+        <LinearLayout
+            style="@style/outer_string_block">
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/ic_email_black_24dp"/>
+            <LinearLayout
+                style="@style/string_block.elem">
+                <android.support.design.widget.TextInputLayout
+                    style="@style/fill">
+                    <EditText
+                        android:id="@+id/email_et"
+                        style="@style/fill.edit_text"
+                        android:hint="E-mail"
+                        android:inputType="textEmailAddress"
+                        android:text="Makushatnik@yandex.ru"/>
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+            <ImageView
+                style="@style/icon.right"
+                android:src="@drawable/ic_send_black_24dp"/>
+        </LinearLayout>
+        <View
+            style="@style/horiz_divider"/>
+
+        <LinearLayout
+            style="@style/outer_string_block">
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/ic_vk_circle"/>
+            <LinearLayout
+                style="@style/string_block.elem">
+                <android.support.design.widget.TextInputLayout
+                    style="@style/fill">
+                    <EditText
+                        android:id="@+id/vk_profile_et"
+                        style="@style/fill.edit_text"
+                        android:hint="Профиль в VK"
+                        android:inputType="textEmailAddress"
+                        android:text="https://vk.com/id6009615"/>
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+            <ImageView
+                style="@style/icon.right"
+                android:src="@drawable/ic_visibility_black_24dp"/>
+        </LinearLayout>
+        <View
+            style="@style/horiz_divider"/>
+
+        <LinearLayout
+            style="@style/outer_string_block">
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/ic_github_circle"/>
+            <LinearLayout
+                style="@style/string_block.elem">
+                <android.support.design.widget.TextInputLayout
+                    style="@style/fill">
+                    <EditText
+                        android:id="@+id/repo_et"
+                        style="@style/fill.edit_text"
+                        android:hint="Репозиторий"
+                        android:inputType="text"
+                        android:text="github.com/makushatnik/DevIntensive"/>
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+            <ImageView
+                style="@style/icon.right"
+                android:src="@drawable/ic_visibility_black_24dp"/>
+        </LinearLayout>
+        <View
+            style="@style/horiz_divider"/>
+
+        <LinearLayout
+            style="@style/outer_string_block">
+            <ImageView
+                style="@style/icon.left"
+                android:src="@drawable/ic_account_circle_black_24dp"/>
+            <LinearLayout
+                style="@style/string_block.elem">
+                <android.support.design.widget.TextInputLayout
+                    style="@style/fill">
+                    <EditText
+                        android:id="@+id/about_et"
+                        style="@style/fill.edit_text"
+                        android:gravity="top"
+                        android:hint="О себе"
+                        android:inputType="textMultiLine"
+                        android:text="Java/Oracle/MongoDB Developer. \nAlso Bitrix, PHP, MySQL, \nPostgreSQL. In my free time i go in for sport, play in a intellectual games."
+                        android:lines="10"/>
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

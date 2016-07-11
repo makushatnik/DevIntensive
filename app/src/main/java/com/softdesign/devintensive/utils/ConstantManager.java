@@ -12,4 +12,12 @@ public interface ConstantManager {
     String USER_VK_CODE = "USER_3_CODE";
     String USER_GIT_CODE = "USER_4_CODE";
     String USER_ABOUT_CODE = "USER_5_CODE";
+    String USER_PHOTO_KEY = "USER_PHOTO_KEY";
+
+    int LOAD_PROFILE_PHOTO = 1;
+    int REQUEST_CAMERA_PICTURE = 99;
+    int REQUEST_GALLERY_PICTURE = 88;
+
+    int PERMISSION_REQUEST_SETTINGS_CODE = 101;
+    int PERMISSION_REQUEST_CAMERA_CODE = 102;
 }
