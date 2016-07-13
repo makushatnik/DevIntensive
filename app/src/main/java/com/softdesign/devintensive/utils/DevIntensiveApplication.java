@@ -2,13 +2,13 @@ package com.softdesign.devintensive.utils;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 /**
  * Created by Ageev Evgeny on 26.06.2016.
  */
 public class DevIntensiveApplication extends Application {
+    private static final DevIntensiveApplication INSTANCE = new DevIntensiveApplication();
     private static SharedPreferences sSharedPreferences;
 
     public static SharedPreferences getSharedPreferences() {
@@ -20,5 +20,9 @@ public class DevIntensiveApplication extends Application {
         super.onCreate();
 
         sSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+    }
+
+    public static DevIntensiveApplication getContext() {
+        return INSTANCE;
     }
 }

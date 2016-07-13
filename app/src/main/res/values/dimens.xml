@@ -12,7 +12,7 @@
     <dimen name="size_extra_large_112">112dp</dimen>
 
     <!-- Spaces -->
-    
+
     <dimen name="spacing_small_8">8dp</dimen>
     <dimen name="spacing_normal_16">16dp</dimen>
     <dimen name="spacing_medial_24">24dp</dimen>
@@ -22,10 +22,18 @@
     <dimen name="fab_right_space">8dp</dimen>
 
     <dimen name="profile_image_size">256dp</dimen>
-    
+    <dimen name="user_info_size">112dp</dimen>
+
     <dimen name="line_size">1dp</dimen>
     <dimen name="zero_spacing">0dp</dimen>
 
     <dimen name="main_app_name">32sp</dimen>
     <dimen name="placeholder_photo_size_90">90sp</dimen>
+
+    <dimen name="size_auth_box">240dp</dimen>
+    <dimen name="auth_box_corners">2dp</dimen>
+    <dimen name="auth_box_elevation">8dp</dimen>
+    <dimen name="font_medium_20">20sp</dimen>
+    <dimen name="font_small_14">14sp</dimen>
+
 </resources>

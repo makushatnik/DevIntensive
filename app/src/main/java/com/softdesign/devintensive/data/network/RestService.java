@@ -1,0 +1,32 @@
+package com.softdesign.devintensive.data.network;
+
+import com.softdesign.devintensive.data.network.req.UserLoginReq;
+import com.softdesign.devintensive.data.network.res.UserModelRes;
+
+import java.io.File;
+
+import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Part;
+import retrofit2.http.Path;
+
+/**
+ * Created by Ageev Evgeny on 11.07.2016.
+ */
+public interface RestService {
+    @POST("login")
+    Call<UserModelRes> loginUser(@Body UserLoginReq req);
+
+    @GET("userInfo")
+    Call<UserModelRes> getUserInfo(String userId);
+
+    @Multipart
+    @POST("user/{userId}/publicValues/profilePhoto")
+    Call<ResponseBody> uploadPhoto(@Part MultipartBody.Part photoFile, @Path("userId") String userId);
+}

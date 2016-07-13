@@ -23,6 +23,12 @@ public class PreferencesManager {
             ConstantManager.USER_ABOUT_CODE
     };
 
+    private static final String[] USER_VALUES = {
+            ConstantManager.USER_RATING,
+            ConstantManager.USER_LINES_CODE,
+            ConstantManager.USER_PROJECTS
+    };
+
     public PreferencesManager() {
         mSharedPreferences = DevIntensiveApplication.getSharedPreferences();
     }
@@ -55,5 +61,68 @@ public class PreferencesManager {
     public Uri loadUserPhoto() {
         return Uri.parse(mSharedPreferences.getString(ConstantManager.USER_PHOTO_KEY,
                 "android.resource://com.softdesign.devintensive/drawable/userphoto_3"));
+    }
+
+    public void saveUserProfileValues(int[] userValues) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        for (int i=0; i < userValues.length; i++) {
+            editor.putString(USER_VALUES[i], String.valueOf(userValues[i]));
+        }
+        editor.apply();
+    }
+
+    public List<String> loadUserProfileValues() {
+        List<String> userValues = new ArrayList<>();
+        userValues.add(mSharedPreferences.getString(ConstantManager.USER_RATING, "0"));
+        userValues.add(mSharedPreferences.getString(ConstantManager.USER_LINES_CODE, "0"));
+        userValues.add(mSharedPreferences.getString(ConstantManager.USER_PROJECTS, "0"));
+        return userValues;
+    }
+
+    public void saveAuthToken(String authToken) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(ConstantManager.AUTH_TOKEN, authToken);
+        editor.apply();
+    }
+
+    public String getAuthToken() {
+        return mSharedPreferences.getString(ConstantManager.AUTH_TOKEN, "null");
+    }
+
+    public void saveUserId(String userId) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(ConstantManager.USER_ID_KEY, userId);
+        editor.apply();
+    }
+
+    public String getUserId() {
+        return mSharedPreferences.getString(ConstantManager.USER_ID_KEY, "null");
+    }
+
+    public void saveAuthInfo(String[] info) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(ConstantManager.USER_MAIL_CODE, info[0]);
+        editor.putString(ConstantManager.USER_PASS_CODE, md5_encode(info[1]));
+        editor.apply();
+    }
+
+    public String[] getAuthInfo() {
+        String[] info = new String[2];
+        info[0] = mSharedPreferences.getString(ConstantManager.USER_MAIL_CODE, "null");
+        info[1] = md5_decode(mSharedPreferences.getString(ConstantManager.USER_PASS_CODE, "null"));
+        return info;
+    }
+
+    private String md5_encode(String p) {
+        //some operations
+        return p;
+    }
+
+    private String md5_decode(String p) {
+        if (p.equals("null")) return p;
+        else {
+
+        }
+        return p;
     }
 }
