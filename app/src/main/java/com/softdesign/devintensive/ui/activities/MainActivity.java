@@ -42,8 +42,15 @@ import android.widget.TextView;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
+import com.softdesign.devintensive.data.network.RestService;
+import com.softdesign.devintensive.data.network.ServiceGenerator;
+import com.softdesign.devintensive.data.network.req.UserLoginReq;
+import com.softdesign.devintensive.data.network.res.UserModelRes;
+import com.softdesign.devintensive.utils.AppConfig;
 import com.softdesign.devintensive.utils.ConstantManager;
+import com.softdesign.devintensive.utils.FileUtils;
 import com.softdesign.devintensive.utils.ImageUtils;
+import com.softdesign.devintensive.utils.NetworkStatusChecker;
 import com.softdesign.devintensive.utils.RoundedAvatarDrawable;
 import com.squareup.picasso.Picasso;
 
@@ -55,6 +62,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.jar.Manifest;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = ConstantManager.TAG_PREFIX + "MainActivity";
@@ -64,8 +79,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView mCalling;
     private ImageView mAvatar;
-    private Layout mLayout;
-    private CoordinatorLayout mCoordinatorLayout;
     private Toolbar mToolbar;
     private DrawerLayout mNavigationDrawer;
     //private NavigationView mNavigationView;
@@ -78,9 +91,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private EditText mUserPhone, mUserMail, mUserVK, mUserGit, mUserAbout;
     private List<EditText> mUserInfoViews;
 
+    private TextView mUserRating, mLinesCode, mProjects, mMainText;
+    private List<TextView> mUserValueViews;
+
     private AppBarLayout.LayoutParams mAppBarParams = null;
     private File mPhotoFile = null;
     private Uri mSelectedImage = null;
+    private Uri mOldImage = null;
 
     private int mGranted = PackageManager.PERMISSION_GRANTED;
 
@@ -145,6 +162,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mUserGit = (EditText) findViewById(R.id.repo_et);
         mUserAbout = (EditText) findViewById(R.id.about_et);
 
+        mUserRating = (TextView) findViewById(R.id.numOfRate);
+        mLinesCode = (TextView) findViewById(R.id.numOfStrings);
+        mProjects = (TextView) findViewById(R.id.numOfProj);
+
+        mMainText = (TextView) findViewById(R.id.main_txt);
+
         mUserInfoViews = new ArrayList<>();
         mUserInfoViews.add(mUserPhone);
         mUserInfoViews.add(mUserMail);
@@ -152,9 +175,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mUserInfoViews.add(mUserGit);
         mUserInfoViews.add(mUserAbout);
 
+        mUserValueViews.add(mUserRating);
+        mUserValueViews.add(mLinesCode);
+        mUserValueViews.add(mProjects);
+
         setupToolbar();
         setupDrawer();
-        loadUserInfo();
+        downloadPhoto();
+        if (!loadAllFields()) {
+            initUserFields();
+            initUserInfoValue();
+        }
+
         Picasso.with(this)
                 .load(mDataManager.getPreferencesManager().loadUserPhoto())
                 .placeholder(R.drawable.userphoto_3)// TODO: 01.07.2016 поменять плейсхолдер
@@ -163,10 +195,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         List<String> test = mDataManager.getPreferencesManager().loadUserProfileData();
 
         mCurrentEditMode = 0;
-        if (savedInstanceState == null) {
-            showSnackbar("Активити запускается впервые");
-        } else {
-            showSnackbar("Активити уже запускалась ранее");
+        if (savedInstanceState != null) {
             mCurrentEditMode = savedInstanceState.getInt(ConstantManager.CURRENT_EDIT_MODE);
         }
         changeEditMode(mCurrentEditMode);
@@ -187,32 +216,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume");
-        loadUserInfo();
+        initUserFields();
     }
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause");
-        saveUserInfo();
+        saveUserFields();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(TAG, "onStop");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.d(TAG, "onRestart");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onDestroy");
     }
 
     @Override
@@ -257,8 +281,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.ECLAIR
                 && keyCode == KeyEvent.KEYCODE_BACK
                 && event.getRepeatCount() == 0) {
-            // Take care of calling this method on earlier versions of
-            // the platform where it doesn't exist.
             onBackPressed();
         }
 
@@ -274,10 +296,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onSaveInstanceState(Bundle ourState) {
         super.onSaveInstanceState(ourState);
         ourState.putInt(ConstantManager.CURRENT_EDIT_MODE, mCurrentEditMode);
-    }
-
-    private void showSnackbar(String message) {
-        Snackbar.make(mCoordinatorLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
     private void setupToolbar() {
@@ -304,21 +322,95 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
+    private boolean loadAllFields() {
+        boolean res = false;
+        if (NetworkStatusChecker.isNetworkAvailable(this)) {
+            //RestService restService = ServiceGenerator.createService(RestService.class);
+            Call<UserModelRes> call = mDataManager.getUserInfo(
+                    mDataManager.getPreferencesManager().getUserId());
+            call.enqueue(new Callback<UserModelRes>() {
+                @Override
+                public void onResponse(Call<UserModelRes> call, Response<UserModelRes> response) {
+                    if (response.code() == 200) {
+                        UserModelRes.Data data = response.body().getData();
+                        UserModelRes.User user = data.getUser();
+                        mUserPhone.setText(user.getContacts().getPhone());
+                        mUserMail.setText(user.getContacts().getEmail());
+                        mUserVK.setText(user.getContacts().getVk());
+                        mUserGit.setText(user.getRepositories().getRepo().get(0).getGit());
+                        mUserAbout.setText(user.getPublicInfo().getBio());
+
+                        mMainText.setText(user.getFirstName() + " " + user.getSecondName());
+                        //res = true;
+                    } else if (response.code() == 404) {
+                        showSnackbar("Неверный логин или пароль");
+                    } else {
+                        showSnackbar("Все пропало, Шеф!!!");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UserModelRes> call, Throwable t) {
+                    //TODO Обработать ошибки
+                }
+            });
+
+            res = true;
+        } else {
+            showSnackbar("Сеть на данный момент не доступна, попробуйте позже");
+        }
+        return res;
+    }
+
+    private void uploadPhoto(Uri fileUri) {
+        if (NetworkStatusChecker.isNetworkAvailable(this)) {
+            RestService restService = ServiceGenerator.createService(RestService.class);
+            File file = FileUtils.getFile(fileUri);
+            RequestBody requestFile =
+                    RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            MultipartBody.Part body =
+                    MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
+            //mDataManager.uploadPhoto(file);
+            Call<ResponseBody> call = restService.uploadPhoto(body,
+                    mDataManager.getPreferencesManager().getUserId());
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call,
+                                       Response<ResponseBody> response) {
+                    Log.v("Upload", "success");
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.e("Upload error:", t.getMessage());
+                }
+            });
+        } else {
+            showSnackbar("Сеть на данный момент не доступна, попробуйте позже");
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case ConstantManager.REQUEST_GALLERY_PICTURE:
                 if (resultCode == RESULT_OK && data != null) {
+                    mOldImage = mSelectedImage;
                     mSelectedImage = data.getData();
-
-                    insertProfileImage(mSelectedImage);
+                    if (mOldImage != mSelectedImage) {
+                        uploadPhoto(mSelectedImage);
+                        insertProfileImage(mSelectedImage);
+                    }
                 }
                 break;
             case ConstantManager.REQUEST_CAMERA_PICTURE:
                 if (requestCode == RESULT_OK && mPhotoFile != null) {
+                    mOldImage = mSelectedImage;
                     mSelectedImage = Uri.fromFile(mPhotoFile);
-
-                    insertProfileImage(mSelectedImage);
+                    if (mOldImage != mSelectedImage) {
+                        uploadPhoto(mSelectedImage);
+                        insertProfileImage(mSelectedImage);
+                    }
                 }
                 break;
         }
@@ -357,13 +449,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 mCollapsingToolbar.setExpandedTitleColor(getResources().getColor(R.color.white));
 
                 if (validatePhone() && validateMail() && validateVk() && validateGithub()) {
-                    saveUserInfo();
+                    saveUserFields();
                 }
             }
         }
     }
 
-    private void saveUserInfo() {
+    private void saveUserFields() {
         List<String> userData = new ArrayList<>();
         for (EditText userField : mUserInfoViews) {
             userData.add(userField.getText().toString());
@@ -371,10 +463,31 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mDataManager.getPreferencesManager().saveUserProfileData(userData);
     }
 
-    private void loadUserInfo() {
+    private void initUserFields() {
         List<String> userData = mDataManager.getPreferencesManager().loadUserProfileData();
         for (int i=0; i < userData.size(); i++) {
             mUserInfoViews.get(i).setText(userData.get(i));
+        }
+    }
+
+    private void initUserInfoValue() {
+        List<String> userData = mDataManager.getPreferencesManager().loadUserProfileValues();
+        for (int i=0; i < userData.size(); i++) {
+            mUserInfoViews.get(i).setText(userData.get(i));
+        }
+    }
+
+    private void downloadPhoto() {
+        if (NetworkStatusChecker.isNetworkAvailable(this)) {
+            String userId = mDataManager.getPreferencesManager().getUserId();
+            if (userId != "null") {
+                mSelectedImage = Uri.parse(AppConfig.BASE_URI +
+                        "user/" + userId +
+                        AppConfig.AVATAR_URI);
+                insertProfileImage(mSelectedImage);
+            }
+        } else {
+            showSnackbar("Сеть на данный момент не доступна, попробуйте позже");
         }
     }
 
@@ -396,11 +509,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 mPhotoFile = createImageFile();
             } catch (IOException e) {
                 e.printStackTrace();
-                // TODO: 01.07.2016 обработать ошибку
+                Log.e(TAG, e.getMessage());
             }
 
             if (mPhotoFile != null) {
-                // TODO: 01.07.2016 передать фотофайл в интент
                 takeCaptureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
                 startActivityForResult(takeCaptureIntent, ConstantManager.REQUEST_CAMERA_PICTURE);
             }
