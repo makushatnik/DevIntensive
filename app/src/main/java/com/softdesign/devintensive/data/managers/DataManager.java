@@ -5,6 +5,7 @@ import android.content.Context;
 import com.softdesign.devintensive.data.network.RestService;
 import com.softdesign.devintensive.data.network.ServiceGenerator;
 import com.softdesign.devintensive.data.network.req.UserLoginReq;
+import com.softdesign.devintensive.data.network.res.UserListRes;
 import com.softdesign.devintensive.data.network.res.UserModelRes;
 import com.softdesign.devintensive.utils.DevIntensiveApplication;
 
@@ -21,13 +22,13 @@ import retrofit2.Call;
 public class DataManager {
     private static DataManager INSTANCE = null;
 
-    private Context mContext;
+    //private Context mContext;
     private RestService mRestService;
     private final PreferencesManager mPreferencesManager;
 
     private DataManager() {
         mPreferencesManager = new PreferencesManager();
-        mContext = DevIntensiveApplication.getContext();
+        //mContext = DevIntensiveApplication.getContext();
         mRestService = ServiceGenerator.createService(RestService.class);
     }
 
@@ -44,9 +45,7 @@ public class DataManager {
         return mPreferencesManager;
     }
 
-    public Context getContext() {
-        return mContext;
-    }
+    //public Context getContext() { return mContext; }
 
     //region ========== Network ==========
 
@@ -54,10 +53,12 @@ public class DataManager {
         return mRestService.loginUser(req);
     }
 
-    public Call<UserModelRes> getUserInfo(String userId) { return mRestService.getUserInfo(userId); }
-
     public Call<ResponseBody> uploadPhoto(MultipartBody.Part photoFile, String userId) {
         return mRestService.uploadPhoto(photoFile, userId);
+    }
+
+    public Call<UserListRes> getUserList() {
+        return mRestService.getUserList();
     }
     //end region
 }

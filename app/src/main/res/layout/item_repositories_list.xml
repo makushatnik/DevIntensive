@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_large_72">
+
+    <TextView
+        android:id="@+id/github_txt"
+        style="@style/fill"
+        android:layout_marginRight="@dimen/spacing_larger_72"
+        android:layout_centerVertical="true"
+        android:text="https://vk.com/id6009615"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_visibility_black_24dp"/>
+
+</RelativeLayout>

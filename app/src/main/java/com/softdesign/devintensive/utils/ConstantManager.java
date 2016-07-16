@@ -19,6 +19,7 @@ public interface ConstantManager {
     String USER_RATING = "USER_RATING";
     String USER_LINES_CODE = "USER_LINES_CODE";
     String USER_PROJECTS = "USER_PROJECTS";
+    String PARCELABLE_KEY = "PARCELABLE_KEY";
 
     int LOAD_PROFILE_PHOTO = 1;
     int REQUEST_CAMERA_PICTURE = 99;

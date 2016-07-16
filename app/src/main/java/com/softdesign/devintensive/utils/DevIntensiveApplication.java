@@ -11,6 +11,8 @@ public class DevIntensiveApplication extends Application {
     private static final DevIntensiveApplication INSTANCE = new DevIntensiveApplication();
     private static SharedPreferences sSharedPreferences;
 
+    public DevIntensiveApplication() {}
+
     public static SharedPreferences getSharedPreferences() {
         return sSharedPreferences;
     }

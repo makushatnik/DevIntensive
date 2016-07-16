@@ -81,7 +81,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ImageView mAvatar;
     private Toolbar mToolbar;
     private DrawerLayout mNavigationDrawer;
-    //private NavigationView mNavigationView;
+    private NavigationView mNavigationView;
     private FloatingActionButton mFab;
     private RelativeLayout mProfilePlaceholder;
     private CollapsingToolbarLayout mCollapsingToolbar;
@@ -109,27 +109,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate");
 
-        //mLayout = R.layout.drawer_header;
         mDataManager = DataManager.getInstance();
         mCalling = (ImageView) findViewById(R.id.call_img);
         mCalling.setOnClickListener(this);
-        /*mAvatar = (ImageView) findViewById(R.id.user_avatar);
-        RoundedAvatarDrawable rad = new RoundedAvatarDrawable(mAvatar.getDrawingCache());
-        //rad.draw(mAvatar);
-        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.ECLAIR) {
-            //mAvatar.setForeground(rad.getCurrent());
-        }*/
 
         mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mNavigationDrawer = (DrawerLayout) findViewById(R.id.navigation_drawer);
-//        mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
-//        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(MenuItem item) {
-//                onNavItemSelected(item);
-//            }
-//        });
+        mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                return onNavItemSelected(item);
+            }
+        });
         mFab = (FloatingActionButton) findViewById(R.id.floating_ab);
         mFab.setOnClickListener(this);
 
@@ -139,9 +132,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mProfilePlaceholder.setOnClickListener(this);
         mProfileImage = (ImageView) findViewById(R.id.user_photo_img);
 
-        //mAvatar = (ImageView) mNavigationView.getHeaderView(0).findViewById(R.id.user_avatar);
-        RoundedAvatarDrawable rad = new RoundedAvatarDrawable(mAvatar.getDrawingCache());
-        mAvatar.setBackground(new BitmapDrawable(getResources(), rad.getBitmap()));
+        mAvatar = (ImageView) mNavigationView.getHeaderView(0).findViewById(R.id.user_avatar);
 
         mCallIv = (ImageView) findViewById(R.id.call_iv);
         mEmailIv = (ImageView) findViewById(R.id.email_iv);
@@ -175,6 +166,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mUserInfoViews.add(mUserGit);
         mUserInfoViews.add(mUserAbout);
 
+        mUserValueViews = new ArrayList<>();
         mUserValueViews.add(mUserRating);
         mUserValueViews.add(mLinesCode);
         mUserValueViews.add(mProjects);
@@ -201,9 +193,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         changeEditMode(mCurrentEditMode);
     }
 
-//    private boolean onNavItemSelected(MenuItem item) {
-//        return false;
-//    }
+    private boolean onNavItemSelected(MenuItem item) {
+        return false;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -227,16 +219,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onStop() {
         super.onStop();
+        saveUserFields();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
+        saveUserFields();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        saveUserFields();
     }
 
     @Override
@@ -273,6 +268,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.github_iv:
                 openGithub();
                 break;
+            case R.id.profile_placeholder:
+                showDialog(ConstantManager.LOAD_PROFILE_PHOTO);
+                break;
         }
     }
 
@@ -290,6 +288,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void onBackPressed() {
         setContentView(R.layout.activity_main);
+
+        mNavigationDrawer.closeDrawer(GravityCompat.START);
     }
 
     @Override
@@ -326,34 +326,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         boolean res = false;
         if (NetworkStatusChecker.isNetworkAvailable(this)) {
             //RestService restService = ServiceGenerator.createService(RestService.class);
-            Call<UserModelRes> call = mDataManager.getUserInfo(
-                    mDataManager.getPreferencesManager().getUserId());
-            call.enqueue(new Callback<UserModelRes>() {
-                @Override
-                public void onResponse(Call<UserModelRes> call, Response<UserModelRes> response) {
-                    if (response.code() == 200) {
-                        UserModelRes.Data data = response.body().getData();
-                        UserModelRes.User user = data.getUser();
-                        mUserPhone.setText(user.getContacts().getPhone());
-                        mUserMail.setText(user.getContacts().getEmail());
-                        mUserVK.setText(user.getContacts().getVk());
-                        mUserGit.setText(user.getRepositories().getRepo().get(0).getGit());
-                        mUserAbout.setText(user.getPublicInfo().getBio());
-
-                        mMainText.setText(user.getFirstName() + " " + user.getSecondName());
-                        //res = true;
-                    } else if (response.code() == 404) {
-                        showSnackbar("Неверный логин или пароль");
-                    } else {
-                        showSnackbar("Все пропало, Шеф!!!");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<UserModelRes> call, Throwable t) {
-                    //TODO Обработать ошибки
-                }
-            });
+//            Call<UserModelRes> call = mDataManager.getUserInfo(
+//                    mDataManager.getPreferencesManager().getUserId());
+//            call.enqueue(new Callback<UserModelRes>() {
+//                @Override
+//                public void onResponse(Call<UserModelRes> call, Response<UserModelRes> response) {
+//                    if (response.code() == 200) {
+//                        UserModelRes.Data data = response.body().getData();
+//                        UserModelRes.User user = data.getUser();
+//                        mUserPhone.setText(user.getContacts().getPhone());
+//                        mUserMail.setText(user.getContacts().getEmail());
+//                        mUserVK.setText(user.getContacts().getVk());
+//                        mUserGit.setText(user.getRepositories().getRepo().get(0).getGit());
+//                        mUserAbout.setText(user.getPublicInfo().getBio());
+//
+//                        mMainText.setText(user.getFirstName() + " " + user.getSecondName());
+//                        //res = true;
+//                    } else if (response.code() == 404) {
+//                        showSnackbar("Неверный логин или пароль");
+//                    } else {
+//                        showSnackbar("Все пропало, Шеф!!!");
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<UserModelRes> call, Throwable t) {
+//                    //TODO Обработать ошибки
+//                }
+//            });
 
             res = true;
         } else {
@@ -426,7 +426,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void changeEditMode(int mode) {
         if (mode == 1) {
-            mFab.setImageResource(R.drawable.ic_create_black_24dp);
+            mFab.setImageResource(R.drawable.ic_done_black_24dp);
             for (EditText userValue : mUserInfoViews) {
                 userValue.setEnabled(true);
                 userValue.setFocusable(true);
@@ -438,7 +438,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
             mUserPhone.requestFocus();
         } else {
-            mFab.setImageResource(R.drawable.ic_done_black_24dp);
+            mFab.setImageResource(R.drawable.ic_create_black_24dp);
             for (EditText userValue : mUserInfoViews) {
                 userValue.setEnabled(false);
                 userValue.setFocusable(false);
@@ -466,7 +466,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void initUserFields() {
         List<String> userData = mDataManager.getPreferencesManager().loadUserProfileData();
         for (int i=0; i < userData.size(); i++) {
-            mUserInfoViews.get(i).setText(userData.get(i));
+            String curParam = userData.get(i);
+            if (!curParam.equals("null")) {
+                mUserInfoViews.get(i).setText(curParam);
+            }
         }
     }
 
@@ -480,7 +483,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private void downloadPhoto() {
         if (NetworkStatusChecker.isNetworkAvailable(this)) {
             String userId = mDataManager.getPreferencesManager().getUserId();
-            if (userId != "null") {
+            if (!userId.equals("null")) {
                 mSelectedImage = Uri.parse(AppConfig.BASE_URI +
                         "user/" + userId +
                         AppConfig.AVATAR_URI);
