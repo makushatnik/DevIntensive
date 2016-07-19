@@ -6,8 +6,9 @@
     <string name="app_name">Агеев Евгений</string>
     <string name="action_settings">Settings</string>
 
+    <string name="user_profile.about">Java/Oracle/MongoDB Developer. \nAlso Bitrix, PHP, MySQL, \nPostgreSQL. In my free time i go in for sport, play in a intellectual games, chess for example.</string>
     <string name="user_profile.placeholder.image">Изменить фотографию профиля?</string>
-    <string name="user_profile_dialog.title">Изменить фотографию профиля</string>
+    <string name="user_profile_dialog.title">Изменить фотографию профиля?</string>
     <string name="user_profile_dialog.gallery">Загрузить из галереи</string>
     <string name="user_profile_dialog.camera">Сделать снимок</string>
     <string name="user_profile_dialog.cancel">Отмена</string>

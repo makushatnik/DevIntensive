@@ -3,57 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/fill"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-    <!--app:layout_behavior=".ui.behaviors.CustomNestedScrollBehavior"-->
-
+    app:layout_behavior=".ui.behaviors.CustomNestedScrollBehavior">
 
     <LinearLayout
         style="@style/main">
 
-        <LinearLayout
-            android:id="@+id/user_info_wrapper"
-            style="@style/user_info">
-            <!--app:layout_behavior=".ui.behaviors.UserInfoBehavior"
-            app:behavior_min_height="56dp"-->
 
-            <LinearLayout
-                style="@style/vert_bar_block"
-                android:layout_weight="0.5">
-                <TextView
-                    android:id="@+id/numOfRate"
-                    style="@style/fill.text_view"
-                    android:text="5"/>
-                <TextView
-                    style="@style/fill.text_view"
-                    android:text="Рейтинг"/>
-            </LinearLayout>
-            <View
-                style="@style/vert_divider"/>
-            <LinearLayout
-                style="@style/vert_bar_block"
-                android:layout_weight="1">
-                <TextView
-                    android:id="@+id/numOfStrings"
-                    style="@style/fill.text_view"
-                    android:text="5"/>
-                <TextView
-                    style="@style/fill.text_view"
-                    android:text="Написано строк кода"/>
-            </LinearLayout>
-            <View
-                style="@style/vert_divider"/>
-            <LinearLayout
-                style="@style/vert_bar_block"
-                android:layout_weight="0.5">
-                <TextView
-                    android:id="@+id/numOfProj"
-                    style="@style/fill.text_view"
-                    android:text="5"/>
-                <TextView
-                    style="@style/fill.text_view"
-                    android:text="Проектов"/>
-            </LinearLayout>
-        </LinearLayout>
 
         <LinearLayout
             style="@style/outer_string_block">
@@ -164,6 +119,7 @@
         <LinearLayout
             style="@style/outer_string_block">
             <ImageView
+                android:id="@+id/about_iv"
                 style="@style/icon.left"
                 android:src="@drawable/ic_account_circle_black_24dp"/>
             <LinearLayout
@@ -176,7 +132,7 @@
                         android:gravity="top"
                         android:hint="О себе"
                         android:inputType="textMultiLine"
-                        android:text="Java/Oracle/MongoDB Developer. \nAlso Bitrix, PHP, MySQL, \nPostgreSQL. In my free time i go in for sport, play in a intellectual games."
+                        android:text="@string/user_profile.about"
                         android:lines="10"/>
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>

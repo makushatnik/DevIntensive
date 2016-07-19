@@ -5,13 +5,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.activities.MainActivity"
     android:id="@+id/navigation_drawer"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/match"
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/main_coordinator"
-        style="@style/fill">
+        style="@style/match">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbar_layout"
@@ -35,10 +34,21 @@
                         android:scaleType="fitXY"
                         android:src="@drawable/userphoto_3"
                         android:fitsSystemWindows="true"/>
+
+                    <!--TextView
+                        android:id="@+id/main_txt"
+                        style="@style/fill"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="@dimen/spacing_normal_16"
+                        android:gravity="center_horizontal"
+                        android:text="@string/app_name"
+                        android:textSize="@dimen/main_app_name"
+                        android:textStyle="bold"
+                        android:fontFamily="monospace"
+                        android:textColor="@color/white"/-->
                     <RelativeLayout
                         android:id="@+id/profile_placeholder"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        style="@style/match"
                         android:background="@color/grey_background"
                         android:visibility="gone">
                         <TextView
@@ -62,17 +72,7 @@
                     </RelativeLayout>
                 </FrameLayout>
 
-                <TextView
-                    android:id="@+id/main_txt"
-                    style="@style/fill"
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="@dimen/spacing_normal_16"
-                    android:gravity="center_horizontal"
-                    android:text="@string/app_name"
-                    android:textSize="@dimen/main_app_name"
-                    android:textStyle="bold"
-                    android:fontFamily="monospace"
-                    android:textColor="@color/white"/>
+
 
                 <android.support.v7.widget.Toolbar
                     android:theme="@style/AppTheme.PopupOverlay"
@@ -80,37 +80,73 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:titleTextColor="@color/white"
-                    app:layout_collapseMode="pin">
+                    app:layout_collapseMode="pin"/>
 
-                </android.support.v7.widget.Toolbar>
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
 
+        <LinearLayout
+            android:id="@+id/user_info_wrapper"
+            style="@style/user_info"
+            app:layout_behavior=".ui.behaviors.UserInfoBehavior"
+            app:behavior_min_height="56dp">
 
-
-
+            <LinearLayout
+                style="@style/vert_bar_block"
+                android:layout_weight="0.5">
+                <TextView
+                    android:id="@+id/numOfRate"
+                    style="@style/fill.text_view"
+                    android:text="5"/>
+                <TextView
+                    style="@style/fill.text_view"
+                    android:text="Рейтинг"/>
+            </LinearLayout>
+            <View
+                style="@style/vert_divider"/>
+            <LinearLayout
+                style="@style/vert_bar_block"
+                android:layout_weight="1">
+                <TextView
+                    android:id="@+id/numOfStrings"
+                    style="@style/fill.text_view"
+                    android:text="5"/>
+                <TextView
+                    style="@style/fill.text_view"
+                    android:text="Написано строк кода"/>
+            </LinearLayout>
+            <View
+                style="@style/vert_divider"/>
+            <LinearLayout
+                style="@style/vert_bar_block"
+                android:layout_weight="0.5">
+                <TextView
+                    android:id="@+id/numOfProj"
+                    style="@style/fill.text_view"
+                    android:text="5"/>
+                <TextView
+                    style="@style/fill.text_view"
+                    android:text="Проектов"/>
+            </LinearLayout>
+        </LinearLayout>
 
         <include layout="@layout/user_profile_content"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/floating_ab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/wrap"
             android:layout_marginRight="@dimen/fab_right_space"
             android:src="@drawable/ic_create_black_24dp"
             app:layout_anchor="@+id/appbar_layout"
-            app:layout_anchorGravity="bottom|right">
+            app:layout_anchorGravity="bottom|right"/>
 
-        </android.support.design.widget.FloatingActionButton>
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        style="@style/match"
         android:layout_gravity="left"
         app:headerLayout="@layout/drawer_header"
-        app:menu="@menu/drawer_menu">
+        app:menu="@menu/drawer_menu"/>
 
-    </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>

@@ -33,6 +33,16 @@ public class PreferencesManager {
         mSharedPreferences = DevIntensiveApplication.getSharedPreferences();
     }
 
+    public void saveFullName(String fullName) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(ConstantManager.USER_FULL_NAME, fullName);
+        editor.apply();
+    }
+
+    public String getFullName() {
+        return mSharedPreferences.getString(ConstantManager.USER_FULL_NAME, "null");
+    }
+
     public void saveUserProfileData(List<String> userFields) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
 
@@ -55,6 +65,12 @@ public class PreferencesManager {
     public void saveUserPhoto(Uri uri) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(ConstantManager.USER_PHOTO_KEY, uri.toString());
+        editor.apply();
+    }
+
+    public void saveUserPhoto(String path) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(ConstantManager.USER_PHOTO_KEY, path);
         editor.apply();
     }
 
