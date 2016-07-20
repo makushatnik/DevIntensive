@@ -76,6 +76,8 @@ public class UserModelRes {
             return secondName;
         }
 
+        public String getFullName() { return firstName + " " + secondName; }
+
         public Repositories getRepositories() {
             return repositories;
         }

@@ -88,7 +88,8 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
                 mPassword.getText().toString().trim()
         });
 
-        Intent loginIntent = new Intent(this, MainActivity.class);
+        //Intent loginIntent = new Intent(this, MainActivity.class);
+        Intent loginIntent = new Intent(this, UserListActivity.class);
         startActivity(loginIntent);
     }
 

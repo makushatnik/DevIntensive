@@ -2,6 +2,7 @@ package com.softdesign.devintensive.ui.activities;
 
 import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -46,13 +47,15 @@ public class UserListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_list);
 
         mDataManager = DataManager.getInstance();
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_container);
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mNavigationDrawer = (DrawerLayout) findViewById(R.id.navigation_drawer);
+        mRecyclerView = (RecyclerView) findViewById(R.id.user_list);
 
-        //GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
+        //GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
+        //mRecyclerView.setHasFixedSize(true);
 
         setupToolbar();
         setupDrawer();
@@ -82,7 +85,8 @@ public class UserListActivity extends AppCompatActivity {
                     mUsers = response.body().getData();
                     mUsersAdapter = new UsersAdapter(mUsers, new UsersAdapter.UserViewHolder.CustomClickListener() {
                         @Override
-                        public void onItemClickListener(int pos) {
+                        public void onUserItemClickListener(int pos) {
+                            Log.d(TAG, "User with index - " + pos);
                             showSnackbar("User with index - " + pos);
                             UserDTO userDTO = new UserDTO(mUsers.get(pos));
 
@@ -94,14 +98,14 @@ public class UserListActivity extends AppCompatActivity {
                     });
                     mRecyclerView.setAdapter(mUsersAdapter);
                 } catch (NullPointerException e) {
-                    Log.e(TAG, e.getMessage());
+                    Log.e(TAG, e.getCause().toString());
                     showSnackbar(e.getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<UserListRes> call, Throwable t) {
-                //TODO обработать ошибку
+                Log.d(TAG, t.getMessage());
                 showSnackbar(t.getMessage());
             }
         });
@@ -109,6 +113,16 @@ public class UserListActivity extends AppCompatActivity {
 
     private void setupDrawer() {
         //TODO реализовать переход в другую активность при клике по элементу меню в NavigationDrawer
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                Intent profileIntent = new Intent(UserListActivity.this, MainActivity.class);
+                startActivity(profileIntent);
+                finish();
+                return false;
+            }
+        });
     }
 
     private void setupToolbar() {

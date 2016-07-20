@@ -2,6 +2,7 @@ package com.softdesign.devintensive.ui.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +10,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.softdesign.devintensive.R;
+import com.softdesign.devintensive.data.managers.DataManager;
 import com.softdesign.devintensive.data.network.res.UserListRes;
 import com.softdesign.devintensive.data.network.res.UserModelRes;
 import com.softdesign.devintensive.ui.views.AspectRatioImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -25,9 +28,27 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     private List<UserListRes.UserData> mUsers;
     private UserViewHolder.CustomClickListener mListener;
 
+    private DataManager mDataManager;
+
     public UsersAdapter(List<UserListRes.UserData> users, UserViewHolder.CustomClickListener listener) {
         mUsers = users;
+        mDataManager = DataManager.getInstance();
+        String userId = mDataManager.getPreferencesManager().getUserId();
+        Log.d("USER ID", "USER ID IS - " + userId);
+        if (!userId.equals("null")){
+            Iterator<UserListRes.UserData> iter = users.iterator();
+            while (iter.hasNext()) {
+                UserListRes.UserData userData = iter.next();
+                if (userId.equals(userData.getId())) {
+                    Log.d("DELETE USER", "USER IS DELETED");
+                    mUsers.remove(userData);
+                    Log.d("DELETE USER", "USER IS DELETED2");
+                    break;
+                }
+            }
+        }
         mListener = listener;
+
     }
 
     @Override
@@ -85,18 +106,18 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             mBio = (TextView) itemView.findViewById(R.id.bio_txt);
             mShowMore = (Button) itemView.findViewById(R.id.more_info_btn);
 
-
+            mShowMore.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             if (mListener != null) {
-                mListener.onItemClickListener(getAdapterPosition());
+                mListener.onUserItemClickListener(getAdapterPosition());
             }
         }
 
         public interface CustomClickListener {
-            void onItemClickListener(int pos);
+            void onUserItemClickListener(int pos);
         }
     }
 }

@@ -24,7 +24,7 @@ import java.util.List;
 public class ProfileUserActivity extends BaseActivity {
     private Toolbar mToolbar;
     private ImageView mProfileImage;
-    //private EditText mUserBio;
+
     private TextView mUserBio, mRating, mCodeLines, mProjects;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private CoordinatorLayout mCoordinatorLayout;
@@ -43,7 +43,7 @@ public class ProfileUserActivity extends BaseActivity {
         mCodeLines = (TextView) findViewById(R.id.code_lines_txt);
         mProjects = (TextView) findViewById(R.id.projects_txt);
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_container);
+        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator);
 
         mRepoListView = (ListView) findViewById(R.id.repo_list);
         setupToolbar();
