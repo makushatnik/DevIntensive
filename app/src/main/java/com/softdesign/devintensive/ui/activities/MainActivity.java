@@ -30,6 +30,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -41,6 +42,7 @@ import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
 import com.softdesign.devintensive.data.network.RestService;
 import com.softdesign.devintensive.data.network.ServiceGenerator;
+import com.softdesign.devintensive.data.network.res.UploadPhotoRes;
 import com.softdesign.devintensive.utils.ConstantManager;
 import com.softdesign.devintensive.utils.FileUtils;
 import com.softdesign.devintensive.utils.ImageUtils;
@@ -83,7 +85,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private EditText mUserPhone, mUserMail, mUserVK, mUserGit, mUserAbout;
     private List<EditText> mUserInfoViews;
 
-    private TextView mUserRating, mLinesCode, mProjects, mMainText;
+    private TextView mUserRating, mLinesCode, mProjects;
     private List<TextView> mUserValueViews;
 
     private AppBarLayout.LayoutParams mAppBarParams = null;
@@ -143,8 +145,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mLinesCode = (TextView) findViewById(R.id.numOfStrings);
         mProjects = (TextView) findViewById(R.id.numOfProj);
 
-        //mMainText = (TextView) findViewById(R.id.main_txt);
-
         mUserInfoViews = new ArrayList<>();
         mUserInfoViews.add(mUserPhone);
         mUserInfoViews.add(mUserMail);
@@ -184,6 +184,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             mNavigationDrawer.openDrawer(GravityCompat.START);
+        } else if (item.getItemId() == R.id.team_menu) {
+            Log.d(TAG, " OPENED LIST ACTIVITY!!!");
+            Intent listIntent = new Intent(this, UserListActivity.class);
+            startActivity(listIntent);
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -233,7 +238,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 }
                 break;
             case R.id.appbar_layout:
-                // TODO: 01.07.2016 сделать выбор откуда загружать фото
+                showDialog(ConstantManager.LOAD_PROFILE_PHOTO);
+                break;
+            case R.id.profile_placeholder:
                 showDialog(ConstantManager.LOAD_PROFILE_PHOTO);
                 break;
             case R.id.call_iv:
@@ -247,9 +254,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.github_iv:
                 openGithub();
-                break;
-            case R.id.profile_placeholder:
-                showDialog(ConstantManager.LOAD_PROFILE_PHOTO);
                 break;
         }
     }
@@ -300,10 +304,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             public boolean onNavigationItemSelected(MenuItem item) {
                 showSnackbar(item.getTitle().toString());
                 item.setChecked(true);
+
                 mNavigationDrawer.closeDrawer(GravityCompat.START);
+                if (item.getItemId() == R.id.team_menu) {
+                    Intent listIntent = new Intent(MainActivity.this, UserListActivity.class);
+                    startActivity(listIntent);
+                    finish();
+                } else if (item.getItemId() == R.id.settings_menu) {
+                    openApplicationSettings();
+                } else if (item.getItemId() == R.id.logout_menu) {
+                    deleteAuth();
+
+                    Intent listIntent = new Intent(MainActivity.this, AuthActivity.class);
+                    startActivity(listIntent);
+                    finish();
+                }
                 return false;
             }
         });
+    }
+
+    private void deleteAuth() {
+        mDataManager.getPreferencesManager().deleteAuth();
     }
 
     private void uploadPhoto(Uri fileUri) {
@@ -312,20 +334,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             File file = FileUtils.getFile(fileUri);
             RequestBody requestFile =
                     RequestBody.create(MediaType.parse("multipart/form-data"), file);
-            MultipartBody.Part body =
-                    MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
+//            MultipartBody.Part body =
+//                    MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
             //mDataManager.uploadPhoto(file);
-            Call<ResponseBody> call = restService.uploadPhoto(body,
-                    mDataManager.getPreferencesManager().getUserId());
-            call.enqueue(new Callback<ResponseBody>() {
+            Call<UploadPhotoRes> call = restService.uploadPhoto(
+                    mDataManager.getPreferencesManager().getUserId(), requestFile);
+            call.enqueue(new Callback<UploadPhotoRes>() {
                 @Override
-                public void onResponse(Call<ResponseBody> call,
-                                       Response<ResponseBody> response) {
+                public void onResponse(Call<UploadPhotoRes> call,
+                                       Response<UploadPhotoRes> response) {
                     Log.v("Upload", "success");
                 }
 
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                public void onFailure(Call<UploadPhotoRes> call, Throwable t) {
                     Log.e("Upload error:", t.getMessage());
                 }
             });
@@ -414,6 +436,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             if (!curParam.equals("null")) {
                 mUserInfoViews.get(i).setText(curParam);
             }
+        }
+        String fullName = mDataManager.getPreferencesManager().getFullName();
+        if (!fullName.equals("null")) {
+            mCollapsingToolbar.setTitle(fullName);
         }
     }
 

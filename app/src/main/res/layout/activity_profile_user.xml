@@ -36,7 +36,6 @@
                     android:titleTextColor="@color/white"
                     app:theme="@style/ToolBarStyle"
                     app:popupTheme="@style/AppTheme.PopupOverlay"
-
                     app:layout_collapseMode="pin"/>
 
             </android.support.design.widget.CollapsingToolbarLayout>
@@ -91,6 +90,6 @@
     </LinearLayout>
 
 
-        <include layout="@layout/static_profile_content"/>
+    <include layout="@layout/static_profile_content"/>
 
 </android.support.design.widget.CoordinatorLayout>

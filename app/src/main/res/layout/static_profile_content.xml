@@ -41,8 +41,7 @@
                     style="@style/fill.edit_text"
                     android:gravity="top"
                     android:hint="О себе"
-                    android:text="@string/user_profile.about"
-                    android:lines="10"/>
+                    android:text=""/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.redmadrobot.chronos.gui.activity.ChronosActivity;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.utils.ConstantManager;
 
@@ -46,13 +47,15 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void runWithDelay() {
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                hideProgress();
-            }
-        }, 3000);
+//        final Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                hideProgress();
+//            }
+//        }, 3000);
+
+        //runOperation();
     }
 
     protected void showError(String message, String tag, Exception error) {

@@ -20,15 +20,15 @@
         android:textSize="@dimen/font_medium_20"
         android:layout_below="@+id/github_hint_txt"/>
 
-
     <ImageView
         android:id="@+id/github_iv"
-        android:layout_width="match_parent"
+        style="@style/icon.right2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        style="@style/icon.right"
+        android:layout_marginTop="@dimen/spacing_medial_24"
         android:src="@drawable/ic_visibility_black_24dp"/>
 
 </RelativeLayout>

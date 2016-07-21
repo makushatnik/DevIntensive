@@ -1,11 +1,14 @@
 package com.softdesign.devintensive.ui.activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -70,7 +73,7 @@ public class ProfileUserActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
                 Snackbar.make(mCoordinatorLayout, "Репозиторий " + repositories.get(pos), Snackbar.LENGTH_LONG)
                     .show();
-                //TODO просмотр репо
+                openGithub(repositories.get(pos));
             }
         });
 
@@ -86,5 +89,18 @@ public class ProfileUserActivity extends BaseActivity {
                 .placeholder(R.drawable.login_bg)
                 .error(R.drawable.login_bg)
                 .into(mProfileImage);
+    }
+
+    public void openGithub(String repoAddr) {
+        if (repoAddr == null || repoAddr.isEmpty()) return;
+
+        int pos = repoAddr.indexOf("http://");
+        if (pos != 0) {
+            repoAddr = "http://" + repoAddr;
+        }
+        Log.d("ADDR", "ADDR - " + repoAddr);
+        Uri address = Uri.parse(repoAddr);
+        Intent intent = new Intent(Intent.ACTION_VIEW, address);
+        startActivity(intent);
     }
 }

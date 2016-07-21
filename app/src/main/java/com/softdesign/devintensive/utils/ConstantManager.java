@@ -7,6 +7,7 @@ public interface ConstantManager {
     String TAG_PREFIX = "DEV ";
     String COLOR_MODE_KEY = "COLOR_MODE_KEY";
     String CURRENT_EDIT_MODE = "CURRENT_EDIT_MODE";
+	String USER_FULL_NAME = "USER_FULL_NAME";
     String USER_PHONE_CODE = "USER_1_CODE";
     String USER_MAIL_CODE = "USER_2_CODE";
     String USER_VK_CODE = "USER_3_CODE";

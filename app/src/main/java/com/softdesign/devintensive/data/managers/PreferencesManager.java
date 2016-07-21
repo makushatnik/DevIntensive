@@ -129,6 +129,15 @@ public class PreferencesManager {
         return info;
     }
 
+    public void deleteAuth() {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(ConstantManager.USER_MAIL_CODE, "null");
+        editor.putString(ConstantManager.USER_PASS_CODE, "null");
+        editor.putString(ConstantManager.USER_ID_KEY, "null");
+        editor.putString(ConstantManager.AUTH_TOKEN, "null");
+        editor.apply();
+    }
+
     private String md5_encode(String p) {
         //some operations
         return p;

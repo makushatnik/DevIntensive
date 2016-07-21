@@ -57,29 +57,29 @@ public class RepositoriesAdapter extends BaseAdapter {
         TextView repoAddr = (TextView) itemView.findViewById(R.id.github_txt);
         repoAddr.setText(curRepo);
 
-        ImageView showRepo = (ImageView) itemView.findViewById(R.id.github_iv);
-        showRepo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openGithub(curRepo);
-            }
-        });
+//        ImageView showRepo = (ImageView) itemView.findViewById(R.id.github_iv);
+//        showRepo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                openGithub(curRepo);
+//            }
+//        });
 
         return itemView;
     }
 
-    public void openGithub(String repoAddr) {
-        if (repoAddr == null || repoAddr.isEmpty()) return;
-
-        int pos = repoAddr.indexOf("http://");
-        if (pos != 0) {
-            repoAddr = "http://" + repoAddr;
-        }
-        Log.d("ADDR", "ADDR - " + repoAddr);
-        Uri address = Uri.parse(repoAddr);
-        Intent intent = new Intent(Intent.ACTION_VIEW, address);
-        if (intent.resolveActivity(mContext.getPackageManager()) != null) {
-            mContext.startActivity(intent);
-        }
-    }
+//    public void openGithub(String repoAddr) {
+//        if (repoAddr == null || repoAddr.isEmpty()) return;
+//
+//        int pos = repoAddr.indexOf("http://");
+//        if (pos != 0) {
+//            repoAddr = "http://" + repoAddr;
+//        }
+//        Log.d("ADDR", "ADDR - " + repoAddr);
+//        Uri address = Uri.parse(repoAddr);
+//        Intent intent = new Intent(Intent.ACTION_VIEW, address);
+//        if (intent.resolveActivity(mContext.getPackageManager()) != null) {
+//            mContext.startActivity(intent);
+//        }
+//    }
 }

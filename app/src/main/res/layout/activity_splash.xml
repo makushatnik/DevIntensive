@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
+    style="@style/match"
+    tools:context="com.softdesign.devintensive.ui.activities.SplashActivity"
+    android:background="@color/grey_background"
+    android:fitsSystemWindows="true">
+
+    <ImageView
+        android:id="@+id/splash_img"
+        style="@style/wrap"
+        android:layout_gravity="center"
+        android:src="@drawable/splash3"
+        android:scaleType="centerCrop"/>
+
+</LinearLayout>

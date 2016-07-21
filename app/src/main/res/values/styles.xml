@@ -34,6 +34,11 @@
         <item name="android:layout_marginRight">@dimen/spacing_medium_32</item>
     </style>
 
+    <style name="icon.right2" parent="icon">
+        <item name="android:layout_marginTop">@dimen/spacing_medial_24</item>
+        <item name="android:layout_marginRight">@dimen/spacing_medium_32</item>
+    </style>
+
     <style name="fill">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
