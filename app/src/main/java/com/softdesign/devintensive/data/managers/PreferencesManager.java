@@ -79,6 +79,10 @@ public class PreferencesManager {
                 "android.resource://com.softdesign.devintensive/drawable/userphoto_3"));
     }
 
+    public boolean isSendPhotoEnabled() {
+        return  mSharedPreferences.getBoolean("send_photo", false);
+    }
+
     public void saveUserProfileValues(int[] userValues) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         for (int i=0; i < userValues.length; i++) {

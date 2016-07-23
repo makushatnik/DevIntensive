@@ -12,7 +12,7 @@
         android:id="@+id/splash_img"
         style="@style/wrap"
         android:layout_gravity="center"
-        android:src="@drawable/splash3"
+        android:src="@drawable/cat"
         android:scaleType="centerCrop"/>
 
 </LinearLayout>

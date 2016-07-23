@@ -5,9 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_coordinator_container"
     style="@style/match"
-    android:background="@color/grey_background"
     android:fitsSystemWindows="true"
-    tools:ignore="contentDescription">
+    tools:ignore="contentDescription"
+    android:background="?android:attr/selectableItemBackground">
+    <!-- android:background="@color/grey_background" -->
 
 <FrameLayout
     style="@style/match">
@@ -102,7 +103,8 @@
                     android:fontFamily="@string/ff_regular"
                     android:text="@string/auth.remember_me"
                     android:textColor="@color/grey"
-                    android:textSize="@dimen/font_small_14"/>
+                    android:textSize="@dimen/font_small_14"
+                    android:focusable="false"/>
 
                 <Button
                     android:id="@+id/login_btn"

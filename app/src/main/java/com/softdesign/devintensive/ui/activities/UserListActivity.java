@@ -94,10 +94,12 @@ public class UserListActivity extends AppCompatActivity {
 
     private void setupDrawer() {
         //TODO реализовать переход в другую активность при клике по элементу меню в NavigationDrawer
+        Log.d(TAG, " EXIT FROM LIST1");
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
+                Log.d(TAG, " EXIT FROM LIST2");
                 Intent profileIntent = new Intent(UserListActivity.this, MainActivity.class);
                 startActivity(profileIntent);
                 finish();

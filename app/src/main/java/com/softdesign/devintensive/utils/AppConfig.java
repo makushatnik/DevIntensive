@@ -6,6 +6,7 @@ package com.softdesign.devintensive.utils;
 public interface AppConfig {
     String BASE_URI = "http://devintensive.softdesign-apps.ru/api/";
     //String AVATAR_URI = "/publicValues/profilePhoto";
+    String RESUME = "https://m.hh.ru/applicant/resume/5e6479eeff0327c4e20039ed1f6e7679434766";
 
     int MAX_CONNECT_TIMEOUT = 5000;
     int MAX_READ_TIMEOUT = 5000;

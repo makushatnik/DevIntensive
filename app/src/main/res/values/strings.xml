@@ -13,6 +13,7 @@
     <string name="user_profile_dialog.camera">Сделать снимок</string>
     <string name="user_profile_dialog.cancel">Отмена</string>
     <string name="user_profile_chose_message">Выберите фото</string>
+    <string name="user_profile.notify">Уведомление</string>
     <string name="user_profile.settings">Настройки</string>
     <string name="user_profile.logout">Выйти</string>
 
@@ -40,4 +41,18 @@
     <!-- Search -->
     <string name="search.title">Поиск пользователя</string>
     <string name="search.query_hint">Введите Имя пользователя</string>
+
+    <!-- Notification -->
+    <string name="notify.title">Взять на работу</string>
+    <string name="notyfy.text">Взять классного сотрудника на работу:)</string>
+    <string name="notify.ticker">Последнее коммерческое предложение!</string>
+
+    <!-- Settings -->
+    <string name="settings.general">Основные</string>
+    <string name="settings.title">Настройки</string>
+    <string name="settings.send_photo">Отправлять фото на сервер</string>
+    <string name="settings.send_photo_summary">Если включить, фото при загрузке с камеры или галереи будет уходить на сервер</string>
+    <string name="settings.check_fields">Проверка полей</string>
+    <string name="settings.check_fields_summary">Проверка полей профиля на корректность перед сохранением</string>
+    <string name="settings.other">Другие настройки</string>
 </resources>

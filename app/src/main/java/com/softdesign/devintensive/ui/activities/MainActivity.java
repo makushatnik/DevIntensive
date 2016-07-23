@@ -1,10 +1,17 @@
 package com.softdesign.devintensive.ui.activities;
 
 import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -43,7 +50,10 @@ import com.softdesign.devintensive.data.managers.DataManager;
 import com.softdesign.devintensive.data.network.RestService;
 import com.softdesign.devintensive.data.network.ServiceGenerator;
 import com.softdesign.devintensive.data.network.res.UploadPhotoRes;
+import com.softdesign.devintensive.ui.fragments.SettingsFragment;
+import com.softdesign.devintensive.utils.AppConfig;
 import com.softdesign.devintensive.utils.ConstantManager;
+import com.softdesign.devintensive.utils.DevIntensiveApplication;
 import com.softdesign.devintensive.utils.FileUtils;
 import com.softdesign.devintensive.utils.ImageUtils;
 import com.softdesign.devintensive.utils.NetworkStatusChecker;
@@ -67,6 +77,7 @@ import retrofit2.Response;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = ConstantManager.TAG_PREFIX + "MainActivity";
+    private static int NOTIFY_ID = 0;
 
     private DataManager mDataManager;
     private int mCurrentEditMode = 0;
@@ -184,11 +195,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             mNavigationDrawer.openDrawer(GravityCompat.START);
-        } else if (item.getItemId() == R.id.team_menu) {
-            Log.d(TAG, " OPENED LIST ACTIVITY!!!");
-            Intent listIntent = new Intent(this, UserListActivity.class);
-            startActivity(listIntent);
-            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -310,8 +316,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     Intent listIntent = new Intent(MainActivity.this, UserListActivity.class);
                     startActivity(listIntent);
                     finish();
+                } else if (item.getItemId() == R.id.notify_menu) {
+                    createNotification();
                 } else if (item.getItemId() == R.id.settings_menu) {
-                    openApplicationSettings();
+                    Intent listIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                    startActivity(listIntent);
                 } else if (item.getItemId() == R.id.logout_menu) {
                     deleteAuth();
 
@@ -322,6 +331,35 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 return false;
             }
         });
+    }
+
+    private void createNotification() {
+        Context ctx = DevIntensiveApplication.getContext();
+        Resources res = ctx.getResources();
+        PendingIntent contentIntent = PendingIntent.getActivity(ctx, 0, new Intent(
+                Intent.ACTION_VIEW, Uri.parse(AppConfig.RESUME)
+        ), PendingIntent.FLAG_CANCEL_CURRENT);
+        Notification.Builder builder = new Notification.Builder(ctx);
+        builder.setContentIntent(contentIntent)
+                .setSmallIcon(R.drawable.ic_notifications_active_black_24dp)
+                .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.java_icon))
+                .setTicker(getString(R.string.notify_ticker))
+                .setWhen(System.currentTimeMillis() + 60*5000)
+                .setAutoCancel(true)
+                .setPriority(Notification.PRIORITY_MAX)
+                .setContentTitle(getString(R.string.notify_title))
+                .setContentText(getString(R.string.notyfy_text))
+                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND);//поменять 2е на lights?
+
+        long[] vibrate = new long[] { 1000, 1000, 1000, 1000, 1000 };
+        //Notification notification = builder.build();
+        Notification notification = new Notification.BigPictureStyle(builder)
+                .bigPicture(BitmapFactory.decodeResource(res, R.drawable.partnership)).build();
+        notification.vibrate = vibrate;
+
+        NotificationManager notificationManager = (NotificationManager) ctx.getSystemService(
+                Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(++NOTIFY_ID, notification);
     }
 
     private void deleteAuth() {
@@ -364,7 +402,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     mOldImage = mSelectedImage;
                     mSelectedImage = data.getData();
                     if (mOldImage != mSelectedImage) {
-                        uploadPhoto(mSelectedImage);
+                        boolean sendPhoto = mDataManager.getPreferencesManager().isSendPhotoEnabled();
+                        if (sendPhoto) {
+                            uploadPhoto(mSelectedImage);
+                        }
                         insertProfileImage(mSelectedImage, 0);
                     }
                 }
@@ -374,7 +415,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     mOldImage = mSelectedImage;
                     mSelectedImage = Uri.fromFile(mPhotoFile);
                     if (mOldImage != mSelectedImage) {
-                        uploadPhoto(mSelectedImage);
+                        boolean sendPhoto = mDataManager.getPreferencesManager().isSendPhotoEnabled();
+                        if (sendPhoto) {
+                            uploadPhoto(mSelectedImage);
+                        }
                         insertProfileImage(mSelectedImage, 0);
                     }
                 }
@@ -460,7 +504,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void loadPhotoFromGallery() {
-
         Intent takeGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
         takeGalleryIntent.setType("image/*");
@@ -550,17 +593,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     public void onClick(DialogInterface dialog, int choiceItem) {
                         switch (choiceItem) {
                             case 0:
-                                // TODO: 01.07.2016 загрузить из галереи
                                 loadPhotoFromGallery();
                                 showSnackbar("загрузить из галереи");
                                 break;
                             case 1:
-                                // TODO: 01.07.2016 загрузить с камеры
                                 loadPhotoFromCamera();
                                 showSnackbar("загрузить с камеры");
                                 break;
                             case 2:
-                                // TODO: 01.07.2016 отмена
                                 dialog.cancel();
                                 showSnackbar("Отмена");
                                 break;

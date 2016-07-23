@@ -1,5 +1,6 @@
 package com.softdesign.devintensive.ui.activities;
 
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.softdesign.devintensive.R;
@@ -115,6 +117,7 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
         }
 
         runHandler();
+        hideProgress();
     }
 
     private void runHandler() {
@@ -130,6 +133,7 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
 
     private void signIn() {
         if (NetworkStatusChecker.isNetworkAvailable(this)) {
+            showProgress();
             Call<UserModelRes> call = mDataManager.loginUser(new UserLoginReq(
                     mLogin.getText().toString().trim(),
                     mPassword.getText().toString().trim()));

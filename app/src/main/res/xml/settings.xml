@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/settings.general">
+
+        <CheckBoxPreference
+            android:key="send_photo"
+            android:title="@string/settings.send_photo"
+            android:summary="@string/settings.send_photo_summary"
+            android:persistent="true"
+            android:defaultValue="false"/>
+
+        <CheckBoxPreference
+            android:key="check_fields"
+            android:title="@string/settings.check_fields"
+            android:summary="@string/settings.check_fields_summary"
+            android:persistent="true"
+            android:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
