@@ -3,8 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/fill"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-    <!--app:layout_behavior=".ui.behaviors.CustomNestedScrollBehavior"-->
+    app:layout_behavior=".ui.behaviors.CustomNestedScrollBehavior">
 
 
     <LinearLayout
@@ -37,17 +36,12 @@
                 android:src="@drawable/ic_account_circle_black_24dp"/>
             <LinearLayout
                 style="@style/string_block.elem">
-                <android.support.design.widget.TextInputLayout
-                    style="@style/fill">
-                    <EditText
-                        android:id="@+id/about_et"
-                        style="@style/fill.edit_text"
-                        android:gravity="top"
-                        android:hint="О себе"
-                        android:inputType="textMultiLine"
-                        android:text="Java/Oracle/MongoDB Developer. \nAlso Bitrix, PHP, MySQL, \nPostgreSQL. In my free time i go in for sport, play in a intellectual games."
-                        android:lines="10"/>
-                </android.support.design.widget.TextInputLayout>
+                <TextView
+                    android:id="@+id/bio_txt"
+                    style="@style/fill.edit_text"
+                    android:gravity="top"
+                    android:hint="О себе"
+                    android:text=""/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

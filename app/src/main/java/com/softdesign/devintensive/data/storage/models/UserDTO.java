@@ -21,17 +21,17 @@ public class UserDTO implements Parcelable {
     private String mBio;
     private List<String> mRepositories;
 
-    public UserDTO(UserListRes.UserData userData) {
+    public UserDTO(User user) {
         List<String> repoLink = new ArrayList<>();
 
-        mPhoto = userData.getPublicInfo().getPhoto();
-        mFullName = userData.getFullName();
-        mRating = String.valueOf(userData.getProfileValues().getRaiting());
-        mCodeLines = String.valueOf(userData.getProfileValues().getLinesCode());
-        mProjects = String.valueOf(userData.getProfileValues().getProjects());
-        mBio = userData.getPublicInfo().getBio();
-        for (UserModelRes.Repo gitLink : userData.getRepositories().getRepo()) {
-            repoLink.add(gitLink.getGit());
+        mPhoto = user.getPhoto();
+        mFullName = user.getFullName();
+        mRating = String.valueOf(user.getRating());
+        mCodeLines = String.valueOf(user.getCodeLines());
+        mProjects = String.valueOf(user.getProjects());
+        mBio = user.getBio();
+        for (Repository gitLink : user.getRepositories()) {
+            repoLink.add(gitLink.getRepositoryName());
         }
 
         mRepositories = repoLink;

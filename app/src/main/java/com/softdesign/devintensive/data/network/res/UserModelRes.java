@@ -76,6 +76,8 @@ public class UserModelRes {
             return secondName;
         }
 
+        public String getFullName() { return firstName + " " + secondName; }
+
         public Repositories getRepositories() {
             return repositories;
         }
@@ -108,6 +110,8 @@ public class UserModelRes {
         @SerializedName("title")
         @Expose
         private String title;
+
+        public String getId() { return id; }
 
         public String getGit() {
             return git;

@@ -33,6 +33,16 @@ public class PreferencesManager {
         mSharedPreferences = DevIntensiveApplication.getSharedPreferences();
     }
 
+    public void saveFullName(String fullName) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(ConstantManager.USER_FULL_NAME, fullName);
+        editor.apply();
+    }
+
+    public String getFullName() {
+        return mSharedPreferences.getString(ConstantManager.USER_FULL_NAME, "null");
+    }
+
     public void saveUserProfileData(List<String> userFields) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
 
@@ -58,9 +68,19 @@ public class PreferencesManager {
         editor.apply();
     }
 
+    public void saveUserPhoto(String path) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(ConstantManager.USER_PHOTO_KEY, path);
+        editor.apply();
+    }
+
     public Uri loadUserPhoto() {
         return Uri.parse(mSharedPreferences.getString(ConstantManager.USER_PHOTO_KEY,
                 "android.resource://com.softdesign.devintensive/drawable/userphoto_3"));
+    }
+
+    public boolean isSendPhotoEnabled() {
+        return  mSharedPreferences.getBoolean("send_photo", false);
     }
 
     public void saveUserProfileValues(int[] userValues) {
@@ -111,6 +131,15 @@ public class PreferencesManager {
         info[0] = mSharedPreferences.getString(ConstantManager.USER_MAIL_CODE, "null");
         info[1] = md5_decode(mSharedPreferences.getString(ConstantManager.USER_PASS_CODE, "null"));
         return info;
+    }
+
+    public void deleteAuth() {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(ConstantManager.USER_MAIL_CODE, "null");
+        editor.putString(ConstantManager.USER_PASS_CODE, "null");
+        editor.putString(ConstantManager.USER_ID_KEY, "null");
+        editor.putString(ConstantManager.AUTH_TOKEN, "null");
+        editor.apply();
     }
 
     private String md5_encode(String p) {

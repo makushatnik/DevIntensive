@@ -2,27 +2,31 @@
     <!-- Font family -->
     <string name="ff_regular">sans-serif</string>
     <string name="ff_medium">sans-serif-medium</string>
-    
+
     <string name="app_name">Агеев Евгений</string>
     <string name="action_settings">Settings</string>
 
+    <string name="user_profile.about">Java/Oracle/MongoDB Developer. \nAlso Bitrix, PHP, MySQL, \nPostgreSQL. In my free time i go in for sport, play in a intellectual games, chess for example.</string>
     <string name="user_profile.placeholder.image">Изменить фотографию профиля?</string>
-    <string name="user_profile_dialog.title">Изменить фотографию профиля</string>
+    <string name="user_profile_dialog.title">Изменить фотографию профиля?</string>
     <string name="user_profile_dialog.gallery">Загрузить из галереи</string>
     <string name="user_profile_dialog.camera">Сделать снимок</string>
     <string name="user_profile_dialog.cancel">Отмена</string>
     <string name="user_profile_chose_message">Выберите фото</string>
+    <string name="user_profile.notify">Уведомление</string>
+    <string name="user_profile.settings">Настройки</string>
+    <string name="user_profile.logout">Выйти</string>
 
     <string name="need_a_permission_title">Для корректной работы необходимо дать требуемые разрешения</string>
     <string name="give_a_permission">Разрешить</string>
 
     <!-- AuthActivity -->
-
     <string name="auth.enter">войти</string>
     <string name="auth.email">Email</string>
     <string name="auth.password">Password</string>
     <string name="auth.login">Войти</string>
     <string name="auth.remember">Забыли пароль?</string>
+    <string name="auth.remember_me">Запомнить меня</string>
     <string name="title_activity_auth">Sign in</string>
 
     <string name="action_sign_in_short">Sign in</string>
@@ -33,4 +37,22 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!-- Search -->
+    <string name="search.title">Поиск пользователя</string>
+    <string name="search.query_hint">Введите Имя пользователя</string>
+
+    <!-- Notification -->
+    <string name="notify.title">Взять на работу</string>
+    <string name="notyfy.text">Взять классного сотрудника на работу:)</string>
+    <string name="notify.ticker">Последнее коммерческое предложение!</string>
+
+    <!-- Settings -->
+    <string name="settings.general">Основные</string>
+    <string name="settings.title">Настройки</string>
+    <string name="settings.send_photo">Отправлять фото на сервер</string>
+    <string name="settings.send_photo_summary">Если включить, фото при загрузке с камеры или галереи будет уходить на сервер</string>
+    <string name="settings.check_fields">Проверка полей</string>
+    <string name="settings.check_fields_summary">Проверка полей профиля на корректность перед сохранением</string>
+    <string name="settings.other">Другие настройки</string>
 </resources>

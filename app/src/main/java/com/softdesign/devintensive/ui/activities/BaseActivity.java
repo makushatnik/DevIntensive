@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.redmadrobot.chronos.gui.activity.ChronosActivity;
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.utils.ConstantManager;
 
@@ -18,15 +19,12 @@ import com.softdesign.devintensive.utils.ConstantManager;
  * Created by Ageev Evgeny on 25.06.2016.
  */
 public class BaseActivity extends AppCompatActivity {
-    private static final String TAG = ConstantManager.TAG_PREFIX + "MainActivity";
     protected ProgressDialog mProgressDialog;
     protected CoordinatorLayout mCoordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Log.d(TAG, "onCreate");
     }
 
     protected void showProgress() {
@@ -49,18 +47,20 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void runWithDelay() {
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                hideProgress();
-            }
-        }, 3000);
+//        final Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                hideProgress();
+//            }
+//        }, 3000);
+
+        //runOperation();
     }
 
-    protected void showError(String message, Exception error) {
+    protected void showError(String message, String tag, Exception error) {
         showToast(message);
-        Log.e(TAG, message, error);
+        Log.e(tag, message, error);
     }
 
     protected void showToast(String message) {
