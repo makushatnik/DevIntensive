@@ -1,19 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.softdesign.devintensive" >
+<manifest package="com.softdesign.devintensive"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <uses-feature
+        android:name="android.hardware.camera2"
+        android:required="false"/>
+    <uses-feature
+        android:name="android.hardware.camera2.autofocus"
+        android:required="false"/>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
+        android:name=".utils.DevIntensiveApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/craft"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".ui.activities.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".ui.activities.SplashActivity"
+            android:label="Business Card">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activities.AuthActivity"
+            android:label="Authorization">
+        </activity>
+        <activity
+            android:name=".ui.activities.UserListActivity"
+            android:label="Команда"
+            android:parentActivityName=".ui.activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.activities.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".ui.activities.ProfileUserActivity"
+            android:label="Профиль"
+            android:parentActivityName=".ui.activities.UserListActivity">
+        </activity>
+        <activity
+            android:name=".ui.activities.SettingsActivity"
+            android:label="Settings"
+            android:parentActivityName=".ui.activities.MainActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.PREFERENCE"/>
             </intent-filter>
         </activity>
     </application>
