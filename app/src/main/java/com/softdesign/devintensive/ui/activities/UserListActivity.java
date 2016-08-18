@@ -1,6 +1,7 @@
 package com.softdesign.devintensive.ui.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
@@ -10,8 +11,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,7 +21,6 @@ import android.widget.SearchView;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
-import com.softdesign.devintensive.data.network.res.UserListRes;
 import com.softdesign.devintensive.data.storage.models.User;
 import com.softdesign.devintensive.data.storage.models.UserDTO;
 import com.softdesign.devintensive.ui.adapters.UsersAdapter;
@@ -31,13 +29,21 @@ import com.softdesign.devintensive.utils.ConstantManager;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class UserListActivity extends AppCompatActivity {
     private static final String TAG = ConstantManager.TAG_PREFIX + "UserListActivity";
-    private CoordinatorLayout mCoordinatorLayout;
-    private Toolbar mToolbar;
-    private DrawerLayout mNavigationDrawer;
-    private RecyclerView mRecyclerView;
+
+    @BindView(R.id.main_coordinator)
+    CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.navigation_drawer)
+    DrawerLayout mNavigationDrawer;
+    @BindView(R.id.user_list)
+    RecyclerView mRecyclerView;
 
     private DataManager mDataManager;
     private UsersAdapter mUsersAdapter;
@@ -54,10 +60,8 @@ public class UserListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_list);
 
         mDataManager = DataManager.getInstance();
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mNavigationDrawer = (DrawerLayout) findViewById(R.id.navigation_drawer);
-        mRecyclerView = (RecyclerView) findViewById(R.id.user_list);
+
+        ButterKnife.bind(this);
 
         mHandler = new Handler();
 
@@ -85,15 +89,15 @@ public class UserListActivity extends AppCompatActivity {
     }
 
     private void loadUsersFromDb() {
-        if (mDataManager.getUserListFromDb().size() == 0) {
+        List<User> users = mDataManager.getUserListFromDb();
+        if (users.size() == 0) {
             showSnackbar("Список пользователей не может быть загружен");
         } else {
-            showUsers(mDataManager.getUserListFromDb());
+            showUsers(users);
         }
     }
 
     private void setupDrawer() {
-        //TODO реализовать переход в другую активность при клике по элементу меню в NavigationDrawer
         Log.d(TAG, " EXIT FROM LIST1");
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -128,7 +132,6 @@ public class UserListActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                //showUsersByQuery(query);
                 return false;
             }
 

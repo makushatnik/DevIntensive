@@ -38,6 +38,11 @@
         completions."
     </string>
 
+    <!-- Permissions -->
+    <string name="error_denied_camera">Нет разрешения на камеру!</string>
+    <string name="error_denied_write_storage">Нет разрешения на запись на SD!</string>
+    <string name="error_denied_read_storage">Нет разрешения на чтение с SD!</string>
+
     <!-- Search -->
     <string name="search.title">Поиск пользователя</string>
     <string name="search.query_hint">Введите Имя пользователя</string>
@@ -50,8 +55,10 @@
     <!-- Settings -->
     <string name="settings.general">Основные</string>
     <string name="settings.title">Настройки</string>
+    <string name="settings.send_photo_key">send_photo</string>
     <string name="settings.send_photo">Отправлять фото на сервер</string>
     <string name="settings.send_photo_summary">Если включить, фото при загрузке с камеры или галереи будет уходить на сервер</string>
+    <string name="settings.check_field_key">check_fields</string>
     <string name="settings.check_fields">Проверка полей</string>
     <string name="settings.check_fields_summary">Проверка полей профиля на корректность перед сохранением</string>
     <string name="settings.other">Другие настройки</string>

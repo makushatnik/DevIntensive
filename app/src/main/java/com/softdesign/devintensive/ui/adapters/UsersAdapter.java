@@ -12,18 +12,19 @@ import android.widget.TextView;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
-import com.softdesign.devintensive.data.network.res.UserListRes;
-import com.softdesign.devintensive.data.network.res.UserModelRes;
 import com.softdesign.devintensive.data.storage.models.User;
 import com.softdesign.devintensive.ui.views.AspectRatioImageView;
 import com.softdesign.devintensive.utils.ConstantManager;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import butterknife.BindDrawable;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Ageev Evgeny on 16.07.2016.
@@ -38,17 +39,15 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
 
     public UsersAdapter(List<User> users, UserViewHolder.CustomClickListener listener) {
         mUsers = users;
+        //delete myself because app breaks
         mDataManager = DataManager.getInstance();
         String userId = mDataManager.getPreferencesManager().getUserId();
-        //Log.d("USER ID", "USER ID IS - " + userId);
         if (!userId.equals("null")){
             Iterator<User> iter = users.iterator();
             while (iter.hasNext()) {
                 User userData = iter.next();
                 if (userId.equals(userData.getId())) {
-                    //Log.d("DELETE USER", "USER IS DELETED");
                     mUsers.remove(userData);
-                    //Log.d("DELETE USER", "USER IS DELETED2");
                     break;
                 }
             }
@@ -59,7 +58,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     @Override
     public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         mContext = parent.getContext();
-        View convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user_list, parent, false);
+        View convertView = LayoutInflater.from(mContext).inflate(R.layout.item_user_list, parent, false);
         return new UserViewHolder(convertView, mListener);
     }
 
@@ -81,7 +80,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
                 .fit()
                 .centerCrop()
                 .networkPolicy(NetworkPolicy.OFFLINE)
-                .into(holder.userPhoto, new Callback() {
+                .into(holder.mUserPhoto, new Callback() {
                     @Override
                     public void onSuccess() {
                         Log.d(TAG, " load from cache");
@@ -95,7 +94,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
                                 .placeholder(holder.mDummy)
                                 .fit()
                                 .centerCrop()
-                                .into(holder.userPhoto, new Callback() {
+                                .into(holder.mUserPhoto, new Callback() {
                                     @Override
                                     public void onSuccess() {
                                         Log.d(TAG, " load from cache");
@@ -128,11 +127,15 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         return mUsers.size();
     }
 
-    public static class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        protected AspectRatioImageView userPhoto;
-        protected TextView mFullName, mRating, mCodeLines, mProjects, mBio;
-        protected Button mShowMore;
-        protected Drawable mDummy;
+    public static class UserViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.user_photo) protected AspectRatioImageView mUserPhoto;
+        @BindView(R.id.username_txt) protected TextView mFullName;
+        @BindView(R.id.rating_txt) protected TextView mRating;
+        @BindView(R.id.code_lines_txt) protected TextView mCodeLines;
+        @BindView(R.id.projects_txt) protected TextView mProjects;
+        @BindView(R.id.bio_txt) protected TextView mBio;
+        @BindView(R.id.more_info_btn) protected Button mShowMore;
+        @BindDrawable(R.drawable.user_bg) protected Drawable mDummy;
 
         private CustomClickListener mListener;
 
@@ -140,20 +143,16 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             super(itemView);
             mListener = listener;
 
-            userPhoto = (AspectRatioImageView) itemView.findViewById(R.id.user_photo);
-            mFullName = (TextView) itemView.findViewById(R.id.username_txt);
-            mRating = (TextView) itemView.findViewById(R.id.rating_txt);
-            mCodeLines = (TextView) itemView.findViewById(R.id.code_lines_txt);
-            mProjects = (TextView) itemView.findViewById(R.id.projects_txt);
-            mBio = (TextView) itemView.findViewById(R.id.bio_txt);
-            mDummy = userPhoto.getContext().getResources().getDrawable(R.drawable.login_bg);
-
-            mShowMore = (Button) itemView.findViewById(R.id.more_info_btn);
-            mShowMore.setOnClickListener(this);
+//            mUserPhoto = (AspectRatioImageView) itemView.findViewById(R.id.user_photo);
+//            mDummy = mUserPhoto.getContext().getResources().getDrawable(R.drawable.login_bg);
+//
+//            mShowMore = (Button) itemView.findViewById(R.id.more_info_btn);
+//            mShowMore.setOnClickListener(this);
+            ButterKnife.bind(this, itemView);
         }
 
-        @Override
-        public void onClick(View view) {
+        @OnClick(R.id.more_info_btn)
+        public void onMoreClick(View view) {
             if (mListener != null) {
                 mListener.onUserItemClickListener(getAdapterPosition());
             }

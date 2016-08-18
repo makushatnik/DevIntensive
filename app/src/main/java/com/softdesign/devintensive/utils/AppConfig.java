@@ -13,4 +13,5 @@ public interface AppConfig {
     int START_DELAY = 1500;
     int SEARCH_DELAY = 3000;
     int SPLASH_DELAY = 3000;
+    int ERROR_VIBRATE_TIME = 2000;
 }

@@ -33,6 +33,12 @@ public class PreferencesManager {
         mSharedPreferences = DevIntensiveApplication.getSharedPreferences();
     }
 
+    //region ::::::::::: Settings :::::::::::::
+    public boolean checkFields() {
+        return mSharedPreferences.getBoolean(ConstantManager.SETTING_CHECK_FIELD, true);
+    }
+    //end region
+
     public void saveFullName(String fullName) {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putString(ConstantManager.USER_FULL_NAME, fullName);

@@ -1,18 +1,15 @@
 package com.softdesign.devintensive.ui.activities;
 
-import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.support.design.widget.CoordinatorLayout;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
@@ -23,9 +20,7 @@ import com.softdesign.devintensive.data.network.res.UserModelRes;
 import com.softdesign.devintensive.data.storage.models.Repository;
 import com.softdesign.devintensive.data.storage.models.RepositoryDao;
 import com.softdesign.devintensive.data.storage.models.User;
-import com.softdesign.devintensive.data.storage.models.UserDTO;
 import com.softdesign.devintensive.data.storage.models.UserDao;
-import com.softdesign.devintensive.ui.adapters.UsersAdapter;
 import com.softdesign.devintensive.utils.AppConfig;
 import com.softdesign.devintensive.utils.ConstantManager;
 import com.softdesign.devintensive.utils.NetworkStatusChecker;
@@ -33,25 +28,35 @@ import com.softdesign.devintensive.utils.NetworkStatusChecker;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AuthActivity extends BaseActivity implements View.OnClickListener {
+public class AuthActivity extends BaseActivity {
     private static final String TAG = ConstantManager.TAG_PREFIX + "AuthActivity";
-    private Button mSignIn;
-    private TextView mRememberPassword;
-    private CheckBox mRemember;
-    private EditText mLogin, mPassword;
 
+    @BindView(R.id.main_coordinator_container) CoordinatorLayout mCoordinatorLayout;
+    //@ViewById(R.id.login_btn) Button mSignIn;
+    //@ViewById(R.id.remember_txt) TextView mRememberPassword;
+    @BindView(R.id.remember_cbx) CheckBox mRemember;
+    @BindView(R.id.auth_email_et) EditText mLogin;
+    @BindView(R.id.auth_password_et) EditText mPassword;
+
+    //@Bean
     private DataManager mDataManager;
+    //@OrmLiteDao
     private RepositoryDao mRepositoryDao;
+    //@OrmLiteDao
     private UserDao mUserDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
+        ButterKnife.bind(this);
 
         mDataManager = DataManager.getInstance();
         mUserDao = mDataManager.getDaoSession().getUserDao();
@@ -67,33 +72,14 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
             runHandler();
         }
 
-        mCoordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_coordinator_container);
-        mSignIn = (Button) findViewById(R.id.login_btn);
-        mRemember = (CheckBox) findViewById(R.id.remember_cbx);
-        mRememberPassword = (TextView) findViewById(R.id.remember_txt);
-        mLogin = (EditText) findViewById(R.id.auth_email_et);
-        mPassword = (EditText) findViewById(R.id.auth_password_et);
-
-        mRememberPassword.setOnClickListener(this);
-        mSignIn.setOnClickListener(this);
-
-        mLogin.setText(login);
-        mPassword.setText(pass);
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.login_btn:
-                signIn();
-                break;
-            case R.id.remember_txt:
-                rememberPassword();
-                break;
+        if (mLogin != null && mPassword != null) {
+            mLogin.setText(login);
+            mPassword.setText(pass);
         }
     }
 
-    private void rememberPassword() {
+    @OnClick(R.id.remember_txt)
+    public void rememberPassword() {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(
                 "http://devintensive.softdesign-apps.ru/forgotpass"));
         startActivity(intent);
@@ -102,7 +88,7 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
     private void loginSuccess(UserModelRes.Data data) {
         if (data == null) return;
 
-        showSnackbar(data.getToken());
+        showSnackbar(mCoordinatorLayout, data.getToken());
         mDataManager.getPreferencesManager().saveAuthToken(data.getToken());
         mDataManager.getPreferencesManager().saveUserId(data.getUser().getId());
         saveUserInvoValue(data);
@@ -131,7 +117,10 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
         }, AppConfig.START_DELAY);
     }
 
-    private void signIn() {
+    @OnClick(R.id.login_btn)
+    public void signIn() {
+        Log.d(TAG, "Great! It's worked!");
+        Log.d(TAG, "Login = " + mLogin.getText().toString().trim());
         if (NetworkStatusChecker.isNetworkAvailable(this)) {
             showProgress();
             Call<UserModelRes> call = mDataManager.loginUser(new UserLoginReq(
@@ -143,21 +132,27 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
                     if (response.code() == 200) {
                         loginSuccess(response.body().getData());
                     } else if (response.code() == 404) {
-                        showSnackbar("Неверный логин или пароль");
+                        onLoginError();
                     } else {
-                        showSnackbar("Все пропало, Шеф!!!");
+                        showSnackbar(mCoordinatorLayout, "Все пропало, Шеф!!!");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<UserModelRes> call, Throwable t) {
-                    showSnackbar(t.getMessage());
-                    Log.e(TAG, t.getMessage());
+                    showSnackbar(mCoordinatorLayout, t.getMessage());
+                    Log.e(TAG, "Login failure - " + t.getMessage());
                 }
             });
         } else {
-            showSnackbar("Сеть на данный момент не доступна, попробуйте позже");
+            showSnackbar(mCoordinatorLayout, "Сеть на данный момент не доступна, попробуйте позже");
         }
+    }
+
+    private void onLoginError() {
+        showSnackbar(mCoordinatorLayout, "Неверный логин или пароль");
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(AppConfig.ERROR_VIBRATE_TIME);
     }
 
     private void saveUserInvoValue(UserModelRes.Data data) {
@@ -210,20 +205,19 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
                         mRepositoryDao.insertOrReplaceInTx(allRepositories);
                         mUserDao.insertOrReplaceInTx(allUsers);
                     } else {
-                        showSnackbar("Список пользователей не может быть получен!");
+                        showSnackbar(mCoordinatorLayout, "Список пользователей не может быть получен!");
                         Log.e(TAG, " onResponse: " + String.valueOf(response.errorBody().source()));
                     }
 
                 } catch (NullPointerException e) {
-                    e.printStackTrace();
-                    showSnackbar(e.getMessage());
+                    showError(TAG, e.getMessage(), e);
                 }
             }
 
             @Override
             public void onFailure(Call<UserListRes> call, Throwable t) {
-                Log.d(TAG, t.getMessage());
-                showSnackbar(t.getMessage());
+                Log.d(TAG, "Save users failure - " + t.getMessage());
+                showSnackbar(mCoordinatorLayout, t.getMessage());
             }
         });
     }
@@ -239,4 +233,3 @@ public class AuthActivity extends BaseActivity implements View.OnClickListener {
         return repositories;
     }
 }
-

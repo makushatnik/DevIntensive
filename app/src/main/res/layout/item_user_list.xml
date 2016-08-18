@@ -18,7 +18,6 @@
             <com.softdesign.devintensive.ui.views.AspectRatioImageView
                 android:id="@+id/user_photo"
                 style="@style/fill"
-                android:src="@drawable/userphoto_5"
                 android:scaleType="centerCrop"/>
                 <!--app:aspect_ratio="0"-->
 

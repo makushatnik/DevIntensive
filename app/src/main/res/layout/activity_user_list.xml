@@ -35,7 +35,6 @@
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
         style="@style/match"
-        android:layout_gravity="left"
-        app:menu="@menu/drawer_list_menu"/>
+        android:layout_gravity="left"/>
 
 </android.support.v4.widget.DrawerLayout>

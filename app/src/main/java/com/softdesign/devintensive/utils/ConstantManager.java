@@ -21,6 +21,7 @@ public interface ConstantManager {
     String USER_LINES_CODE = "USER_LINES_CODE";
     String USER_PROJECTS = "USER_PROJECTS";
     String PARCELABLE_KEY = "PARCELABLE_KEY";
+    String SETTING_CHECK_FIELD = "check_fields";
 
     int LOAD_PROFILE_PHOTO = 1;
     int REQUEST_CAMERA_PICTURE = 99;
@@ -28,5 +29,5 @@ public interface ConstantManager {
 
     int PERMISSION_REQUEST_SETTINGS_CODE = 101;
     int PERMISSION_REQUEST_CAMERA_CODE = 102;
-
+    int REQUEST_PERMISSIONS_READ_SDCARD = 103;
 }
