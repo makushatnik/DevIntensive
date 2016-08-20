@@ -15,19 +15,17 @@ import com.softdesign.devintensive.data.storage.models.UserDao;
 import com.softdesign.devintensive.utils.DevIntensiveApplication;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 /**
  * Created by Ageev Evgeny on 27.06.2016.
  * Singleton
  */
+//@EBean
 public class DataManager {
     private static DataManager INSTANCE = null;
     private Picasso mPicasso;
@@ -71,7 +69,7 @@ public class DataManager {
         return mRestService.loginUser(req);
     }
 
-    public Call<UploadPhotoRes> uploadPhoto(String userId, RequestBody photoFile) {
+    public Call<UploadPhotoRes> uploadPhoto(String userId, MultipartBody.Part photoFile) {
         return mRestService.uploadPhoto(userId, photoFile);
     }
 

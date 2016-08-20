@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -23,20 +22,17 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.settings);
-
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_send_photo_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_check_field_key)));
+        //checkboxes don't need binding
+        //bindPreferenceSummaryToValue(findPreference(getString(R.string.settings_send_photo_key)));
     }
 
     private void bindPreferenceSummaryToValue(Preference preference) {
         preference.setOnPreferenceChangeListener(this);
-        //here was an error
-        if (!(preference instanceof CheckBoxPreference)) {
-            onPreferenceChange(preference,
+
+        onPreferenceChange(preference,
                     PreferenceManager
                             .getDefaultSharedPreferences(preference.getContext())
                             .getString(preference.getKey(), ""));
-        }
     }
 
     @Override

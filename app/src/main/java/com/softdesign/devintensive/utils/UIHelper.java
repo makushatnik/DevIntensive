@@ -3,7 +3,9 @@ package com.softdesign.devintensive.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.TypedValue;
 
@@ -38,6 +40,22 @@ public class UIHelper {
 
     public static float currentFriction(int start, int end, int currentValue) {
         return (float)(currentValue - start) / (end - start);
+    }
+
+    public static String filePathFromUri(@NonNull Uri uri) {
+        String filePath = null;
+        if ("content".equals(uri.getScheme())) {
+            Cursor cursor = mContext.getContentResolver().query(uri,
+                    new String[]{android.provider.MediaStore.Images.ImageColumns.DATA}, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                filePath = cursor.getString(0);
+                cursor.close();
+            }
+        } else {
+            filePath = uri.getPath();
+        }
+        return filePath;
     }
 
     public static void openRepo(Context ctx, String repoAddr) {

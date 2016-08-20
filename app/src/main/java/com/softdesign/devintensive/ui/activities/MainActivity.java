@@ -45,13 +45,10 @@ import android.widget.TextView;
 
 import com.softdesign.devintensive.R;
 import com.softdesign.devintensive.data.managers.DataManager;
-import com.softdesign.devintensive.data.network.RestService;
-import com.softdesign.devintensive.data.network.ServiceGenerator;
 import com.softdesign.devintensive.data.network.res.UploadPhotoRes;
 import com.softdesign.devintensive.utils.AppConfig;
 import com.softdesign.devintensive.utils.ConstantManager;
 import com.softdesign.devintensive.utils.DevIntensiveApplication;
-import com.softdesign.devintensive.utils.FileUtils;
 import com.softdesign.devintensive.utils.ImageUtils;
 import com.softdesign.devintensive.utils.NetworkStatusChecker;
 import com.softdesign.devintensive.utils.UIHelper;
@@ -70,10 +67,13 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.softdesign.devintensive.utils.UIHelper.filePathFromUri;
 
 
 public class MainActivity extends BaseActivity {
@@ -294,25 +294,31 @@ public class MainActivity extends BaseActivity {
 
     private void uploadPhoto(Uri fileUri) {
         if (NetworkStatusChecker.isNetworkAvailable(this)) {
-            RestService restService = ServiceGenerator.createService(RestService.class);
-            File file = FileUtils.getFile(fileUri);
+            Log.d(TAG, "Magic = " + filePathFromUri(fileUri));
+            File file = new File(filePathFromUri(fileUri));
             RequestBody requestFile =
                     RequestBody.create(MediaType.parse("multipart/form-data"), file);
-//            MultipartBody.Part body =
-//                    MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
-            //mDataManager.uploadPhoto(file);
-            Call<UploadPhotoRes> call = restService.uploadPhoto(
-                    mDataManager.getPreferencesManager().getUserId(), requestFile);
+            MultipartBody.Part body =
+                    MultipartBody.Part.createFormData("photo", file.getName(), requestFile);
+
+            Call<UploadPhotoRes> call = mDataManager.uploadPhoto(
+                    mDataManager.getPreferencesManager().getUserId(), body);
             call.enqueue(new Callback<UploadPhotoRes>() {
                 @Override
                 public void onResponse(Call<UploadPhotoRes> call,
                                        Response<UploadPhotoRes> response) {
-                    Log.v("Upload", "success");
+                    if (!response.isSuccessful()) {
+                        showError(TAG, "Error: " + String.valueOf(response.errorBody().source()));
+                    } else {
+                        Log.v(TAG, "success");
+                        showSnackbar(mCoordinatorLayout, "Upload success!");
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<UploadPhotoRes> call, Throwable t) {
-                    Log.e("Upload error:", t.getMessage());
+                    Log.e(TAG, "Upload error:" + t.getMessage());
+                    showSnackbar(mCoordinatorLayout, "Upload failed!");
                 }
             });
         } else {
@@ -329,6 +335,7 @@ public class MainActivity extends BaseActivity {
                     mSelectedImage = data.getData();
                     if (mOldImage != mSelectedImage) {
                         boolean sendPhoto = mDataManager.getPreferencesManager().isSendPhotoEnabled();
+                        Log.d(TAG, "sendPhoto = " + sendPhoto);
                         if (sendPhoto) {
                             uploadPhoto(mSelectedImage);
                         }
@@ -340,8 +347,10 @@ public class MainActivity extends BaseActivity {
                 if (requestCode == RESULT_OK && mPhotoFile != null) {
                     mOldImage = mSelectedImage;
                     mSelectedImage = Uri.fromFile(mPhotoFile);
+                    Log.d(TAG, "mOldImage = " + mOldImage);
                     if (mOldImage != mSelectedImage) {
                         boolean sendPhoto = mDataManager.getPreferencesManager().isSendPhotoEnabled();
+                        Log.d(TAG, "sendPhoto = " + sendPhoto);
                         if (sendPhoto) {
                             uploadPhoto(mSelectedImage);
                         }

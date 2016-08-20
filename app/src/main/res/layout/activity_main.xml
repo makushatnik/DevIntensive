@@ -16,7 +16,8 @@
             android:id="@+id/appbar_layout"
             android:theme="@style/AppTheme.AppBarOverlay"
             style="@style/fill"
-            android:background="@color/primary_color">
+            android:background="?android:attr/selectableItemBackground">
+            <!-- android:background="@color/primary_color" -->
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/collapsing_toolbar"
@@ -38,11 +39,10 @@
                     <RelativeLayout
                         android:id="@+id/profile_placeholder"
                         style="@style/match"
-                        android:background="@color/grey_background"
-                        android:visibility="gone">
+                        android:visibility="gone"
+                        android:background="@color/grey_background">
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            style="@style/wrap"
                             android:text="@string/user_profile.placeholder.image"
                             android:textColor="@color/white"
                             android:fontFamily="sans-serif-medium"

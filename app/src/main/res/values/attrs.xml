@@ -5,6 +5,6 @@
     </declare-styleable>
 
     <declare-styleable name="AspectRatioImageView">
-        <attr name="aspect_ratio" format="dimension"/>
+        <attr name="aspect_ratio" format="float"/>
     </declare-styleable>
 </resources>

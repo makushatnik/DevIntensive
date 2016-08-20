@@ -8,8 +8,6 @@
     <LinearLayout
         style="@style/main">
 
-
-
         <LinearLayout
             style="@style/outer_string_block">
             <ImageView
@@ -83,7 +81,7 @@
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
             <ImageView
-                android:id="@+id/vk_visible_iv"
+                android:id="@+id/vk_show_iv"
                 style="@style/icon.right"
                 android:src="@drawable/ic_visibility_black_24dp"/>
         </LinearLayout>
@@ -93,7 +91,7 @@
         <LinearLayout
             style="@style/outer_string_block">
             <ImageView
-                android:id="@+id/github_iv"
+                android:id="@+id/git_iv"
                 style="@style/icon.left"
                 android:src="@drawable/ic_github_circle"/>
             <LinearLayout
@@ -109,7 +107,7 @@
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
             <ImageView
-                android:id="@+id/github_visible_iv"
+                android:id="@+id/git_show_iv"
                 style="@style/icon.right"
                 android:src="@drawable/ic_visibility_black_24dp"/>
         </LinearLayout>

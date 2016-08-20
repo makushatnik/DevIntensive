@@ -25,8 +25,7 @@
 
         <TextView
             android:id="@+id/user_name_txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/fill"
             android:text="Агеев Евгений"
             android:textColor="@color/white"
             android:textSize="14sp"
@@ -34,8 +33,7 @@
 
         <TextView
             android:id="@+id/user_email_txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/fill"
             android:text="makushatnik@yandex.ru"
             android:textColor="@color/white"
             android:textSize="14sp"
