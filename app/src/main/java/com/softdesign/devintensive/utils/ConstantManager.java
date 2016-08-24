@@ -30,4 +30,9 @@ public interface ConstantManager {
     int PERMISSION_REQUEST_SETTINGS_CODE = 101;
     int PERMISSION_REQUEST_CAMERA_CODE = 102;
     int REQUEST_PERMISSIONS_READ_SDCARD = 103;
+
+    int ORDER_BY_CODELINES = 0;
+    int ORDER_BY_RATING = 1;
+    int ORDER_BY_PROJECTS = 2;
+    int ORDER_BY_LIKES = 3;
 }

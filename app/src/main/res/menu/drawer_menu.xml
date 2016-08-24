@@ -14,9 +14,26 @@
 
     <item
         android:id="@+id/notify_menu"
-        android:checkable="true"
         android:icon="@drawable/ic_notifications_active_black_24dp"
         android:title="@string/user_profile.notify"/>
+
+    <item
+        android:id="@+id/check_wifi_menu"
+        android:checkable="true"
+        android:icon="@drawable/ic_wifi_black_24dp"
+        android:title="@string/user_profile.check_wifi"/>
+
+    <item
+        android:id="@+id/send_sms_menu"
+        android:icon="@drawable/ic_textsms_black_24dp"
+        android:title="@string/user_profile.send_sms"/>
+
+    <item
+        android:id="@+id/send_money_menu"
+        android:checkable="true"
+        android:icon="@drawable/ic_account_balance_wallet_black_24dp"
+        android:title="@string/user_profile.send_money"/>
+
 </group>
     <group>
         <item

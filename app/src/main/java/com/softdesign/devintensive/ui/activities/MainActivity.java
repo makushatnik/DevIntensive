@@ -5,16 +5,22 @@ import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -237,26 +243,85 @@ public class MainActivity extends BaseActivity {
                 showSnackbar(mCoordinatorLayout, item.getTitle().toString());
                 item.setChecked(true);
 
+                int itemId = item.getItemId();
                 mNavigationDrawer.closeDrawer(GravityCompat.START);
-                if (item.getItemId() == R.id.team_menu) {
-                    Intent listIntent = new Intent(MainActivity.this, UserListActivity.class);
-                    startActivity(listIntent);
+                if (itemId == R.id.team_menu) {
+                    Intent intent = new Intent(MainActivity.this, UserListActivity.class);
+                    startActivity(intent);
                     finish();
-                } else if (item.getItemId() == R.id.notify_menu) {
+                } else if (itemId == R.id.notify_menu) {
                     createNotification();
-                } else if (item.getItemId() == R.id.settings_menu) {
-                    Intent listIntent = new Intent(MainActivity.this, SettingsActivity.class);
-                    startActivity(listIntent);
-                } else if (item.getItemId() == R.id.logout_menu) {
+                } else if (itemId == R.id.check_wifi_menu) {
+                    checkWifiNetwork();
+                } else if (itemId == R.id.send_sms_menu) {
+                    sendSms();
+                } else if (itemId == R.id.send_money_menu) {
+                    openMoneySystem();
+                } else if (itemId == R.id.settings_menu) {
+                    Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                    startActivity(intent);
+                } else if (itemId == R.id.logout_menu) {
                     deleteAuth();
 
-                    Intent listIntent = new Intent(MainActivity.this, AuthActivity.class);
-                    startActivity(listIntent);
+                    Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+                    startActivity(intent);
                     finish();
                 }
                 return false;
             }
         });
+    }
+
+    private void checkWifiNetwork() {
+        ConnectivityManager conn = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = conn.getActiveNetworkInfo();
+        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+        String wifiState = "";
+        if (isConnected) {
+            boolean isWifi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+            if (isWifi) wifiState = "wifi on";
+        } else {
+            final WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+
+            if (!wifi.isWifiEnabled()) {
+                if (wifi.getWifiState() != WifiManager.WIFI_STATE_ENABLING) {
+                    //wifi.setWifiEnabled(true);
+                    wifiState = "wifi off";
+                }
+            } else {
+                registerReceiver(new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context ctx, Intent i) {
+                        List<ScanResult> list = wifi.getScanResults();
+                        if (list.size() > 0) {
+                            showToast("Connected: true, WiFi: yes, have a points");
+                        } else {
+                            showToast("Connected: true, WiFi: yes, no points are here");
+                        }
+                    }
+                }, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+                wifi.startScan();
+                return;
+            }
+        }
+
+        showToast("Connected: " + isConnected + ", WiFi: " + wifiState);
+    }
+
+    private void sendSms() {
+        //May be SmsManager is better way?
+        String phone = checkPhoneAvailability();
+        if (phone.equals("null")) return;
+
+        Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse("sms:" + phone));
+        i.putExtra("sms_body", "Offer a work with salary: {your_offer}$");
+        startActivity(i);
+    }
+
+    private void openMoneySystem() {
+        //Now simple implemented.
+        //TODO Change to AlertBuilder
+        showToast("ЯД 41001276984788");
     }
 
     private void createNotification() {
@@ -660,11 +725,8 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.call_img)
     public void dialNumber() {
-        EditText userPhone = mUserInfoViews.get(0);
-        if (userPhone == null) return;
-
-        String phone = userPhone.getText().toString().trim();
-        if (phone.isEmpty()) return;
+        String phone = checkPhoneAvailability();
+        if (phone.equals("null")) return;
 
         Intent intent = new Intent(Intent.ACTION_CALL);
         phone = getPhoneNumber(phone);
@@ -675,6 +737,22 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
             }
         }
+    }
+
+    private String checkPhoneAvailability() {
+        EditText userPhone = mUserInfoViews.get(0);
+        if (userPhone == null) return "null";
+
+        String phone = getPhoneNumber(userPhone.getText().toString().trim());
+        if (phone.isEmpty()) return "null";
+
+        PackageManager pm = getPackageManager();
+        if (!pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
+            showToast("You don't have a phone feature!");
+            return "null";
+        }
+
+        return phone;
     }
 
     @OnClick(R.id.send_iv)

@@ -6,14 +6,18 @@ import com.softdesign.devintensive.data.network.PicassoCache;
 import com.softdesign.devintensive.data.network.RestService;
 import com.softdesign.devintensive.data.network.ServiceGenerator;
 import com.softdesign.devintensive.data.network.req.UserLoginReq;
+import com.softdesign.devintensive.data.network.res.LikeRes;
 import com.softdesign.devintensive.data.network.res.UploadPhotoRes;
 import com.softdesign.devintensive.data.network.res.UserListRes;
 import com.softdesign.devintensive.data.network.res.UserModelRes;
 import com.softdesign.devintensive.data.storage.models.DaoSession;
 import com.softdesign.devintensive.data.storage.models.User;
 import com.softdesign.devintensive.data.storage.models.UserDao;
+import com.softdesign.devintensive.utils.ConstantManager;
 import com.softdesign.devintensive.utils.DevIntensiveApplication;
 import com.squareup.picasso.Picasso;
+
+import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +85,9 @@ public class DataManager {
         return mRestService.getUserList();
     }
 
+    public Call<LikeRes> likeUser(String userId) {
+        return mRestService.likeUser(userId);
+    }
     //end region
 
     //region =========== Database ===========
@@ -89,35 +96,52 @@ public class DataManager {
         return mDaoSession;
     }
 
-    public List<User> getUserListFromDb() {
+//    public List<User> getUserListFromDb() {
+//        List<User> userList = new ArrayList<>();
+//        try {
+//            userList = mDaoSession.queryBuilder(User.class)
+//                    .where(UserDao.Properties.CodeLines.gt(0))
+//                    .orderDesc(UserDao.Properties.CodeLines)
+//                    .build()
+//                    .list();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return userList;
+//    }
+
+    public List<User> getUserListByOrder(String queryName, int order) {
         List<User> userList = new ArrayList<>();
         try {
-            userList = mDaoSession.queryBuilder(User.class)
-                    .where(UserDao.Properties.CodeLines.gt(0))
-                    .orderDesc(UserDao.Properties.CodeLines)
-                    .build()
-                    .list();
+            QueryBuilder<User> builder = mDaoSession.queryBuilder(User.class)
+                    .where(UserDao.Properties.Rating.gt(0),
+                            UserDao.Properties.SearchName.like("%" + queryName.toUpperCase() + "%"));
+
+            switch (order) {
+                case ConstantManager.ORDER_BY_CODELINES:
+                    builder = builder.orderDesc(UserDao.Properties.CodeLines);
+                    break;
+                case ConstantManager.ORDER_BY_RATING:
+                    builder = builder.orderDesc(UserDao.Properties.Rating);
+                    break;
+                case ConstantManager.ORDER_BY_PROJECTS:
+                    builder = builder.orderDesc(UserDao.Properties.Projects);
+                    break;
+                case ConstantManager.ORDER_BY_LIKES:
+                    //builder = builder.orderDesc(UserDao.Properties.LikeRating);
+                    break;
+                default:
+                    builder = builder.orderDesc(UserDao.Properties.CodeLines);
+            }
+
+            userList = builder.build().list();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return userList;
     }
 
-    public List<User> getUserListByName(String queryName) {
-        List<User> userList = new ArrayList<>();
-        try {
-            userList = mDaoSession.queryBuilder(User.class)
-                        .where(UserDao.Properties.Rating.gt(0),
-                                UserDao.Properties.SearchName.like("%" + queryName.toUpperCase() + "%"))
-                        .orderDesc(UserDao.Properties.CodeLines)
-                        .build()
-                        .list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return userList;
-    }
 
     //endregion
 }

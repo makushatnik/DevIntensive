@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.softdesign.devintensive.R;
@@ -34,10 +33,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     private Context mContext;
     private List<User> mUsers;
     private UserViewHolder.CustomClickListener mListener;
+    private UserViewHolder.LikeClickListener mLikeListener;
 
     private DataManager mDataManager;
 
-    public UsersAdapter(List<User> users, UserViewHolder.CustomClickListener listener) {
+    public UsersAdapter(List<User> users,
+                        UserViewHolder.CustomClickListener listener,
+                        UserViewHolder.LikeClickListener likeListener) {
         mUsers = users;
         //delete myself because app breaks
         mDataManager = DataManager.getInstance();
@@ -53,13 +55,14 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             }
         }
         mListener = listener;
+        mLikeListener = likeListener;
     }
 
     @Override
     public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         mContext = parent.getContext();
         View convertView = LayoutInflater.from(mContext).inflate(R.layout.item_user_list, parent, false);
-        return new UserViewHolder(convertView, mListener);
+        return new UserViewHolder(convertView, mListener, mLikeListener);
     }
 
     @Override
@@ -112,6 +115,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         holder.mRating.setText(String.valueOf(user.getRating()));
         holder.mCodeLines.setText(String.valueOf(user.getCodeLines()));
         holder.mProjects.setText(String.valueOf(user.getProjects()));
+        holder.mLikesNum.setText(String.valueOf(user.getLikeRating()));
 
         String about = user.getBio();
         if (about == null && about.isEmpty()) {
@@ -134,20 +138,22 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         @BindView(R.id.code_lines_txt) protected TextView mCodeLines;
         @BindView(R.id.projects_txt) protected TextView mProjects;
         @BindView(R.id.bio_txt) protected TextView mBio;
-        @BindView(R.id.more_info_btn) protected Button mShowMore;
+        //@BindView(R.id.more_info_btn) protected Button mShowMore;
+        //@BindView(R.id.like_btn) protected ImageView mLikeBtn;
+        @BindView(R.id.numOfLikes) protected TextView mLikesNum;
         @BindDrawable(R.drawable.user_bg) protected Drawable mDummy;
 
         private CustomClickListener mListener;
+        private LikeClickListener mLikeListener;
 
-        public UserViewHolder(View itemView, CustomClickListener listener) {
+        public UserViewHolder(View itemView,
+                              CustomClickListener listener,
+                              LikeClickListener likeListener) {
             super(itemView);
-            mListener = listener;
 
-//            mUserPhoto = (AspectRatioImageView) itemView.findViewById(R.id.user_photo);
-//            mDummy = mUserPhoto.getContext().getResources().getDrawable(R.drawable.login_bg);
-//
-//            mShowMore = (Button) itemView.findViewById(R.id.more_info_btn);
-//            mShowMore.setOnClickListener(this);
+            mListener = listener;
+            mLikeListener = likeListener;
+
             ButterKnife.bind(this, itemView);
         }
 
@@ -158,8 +164,19 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             }
         }
 
+        @OnClick(R.id.like_btn)
+        public void onLikeBtn(View view) {
+            if (mLikeListener != null) {
+                mLikeListener.onLikeClickListener(getAdapterPosition());
+            }
+        }
+
         public interface CustomClickListener {
             void onUserItemClickListener(int pos);
+        }
+
+        public interface LikeClickListener {
+            void onLikeClickListener(int pos);
         }
     }
 }

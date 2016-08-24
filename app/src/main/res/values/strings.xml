@@ -14,6 +14,9 @@
     <string name="user_profile_dialog.cancel">Отмена</string>
     <string name="user_profile_chose_message">Выберите фото</string>
     <string name="user_profile.notify">Уведомление</string>
+    <string name="user_profile.check_wifi">Проверить WiFi</string>
+    <string name="user_profile.send_sms">Отправить SMS</string>
+    <string name="user_profile.send_money">Перечислить денежную сумму</string>
     <string name="user_profile.settings">Настройки</string>
     <string name="user_profile.logout">Выйти</string>
 
@@ -46,6 +49,10 @@
     <!-- Search -->
     <string name="search.title">Поиск пользователя</string>
     <string name="search.query_hint">Введите Имя пользователя</string>
+    <string name="search.lines_title">Сортировка по коду</string>
+    <string name="search.rating_title">Сортировка по рейтингу</string>
+    <string name="search.projects_title">Сортировка по проектам</string>
+    <string name="search.likes_title">Сортировка по лайкам</string>
 
     <!-- Notification -->
     <string name="notify.title">Взять на работу</string>

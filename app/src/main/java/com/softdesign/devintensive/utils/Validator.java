@@ -95,9 +95,12 @@ public class Validator {
             return false;
         }
 
-        //Pattern p = Pattern.compile("^[a-z0-9_-]{3,}@[a-z0-9_-]{2,}\.^[a-z]{2,6}$");
-        //Matcher m = p.matcher(email);
-        //if (!m.matches()) return 1;
+        Pattern p = Pattern.compile("^[a-z0-9_-]{3,}@[a-z0-9_-]{2,}.[a-z]{2,6}$");
+        Matcher m = p.matcher(email);
+        if (!m.matches()) {
+            mErrorList.add(resultCodes[4]);
+            return false;
+        }
         return true;
     }
 

@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.TypedValue;
 
+import com.softdesign.devintensive.data.storage.models.User;
+
 /**
  * Created by Ageev Evgeny on 09.07.2016.
  */
@@ -72,5 +74,14 @@ public class UIHelper {
         if (intent.resolveActivity(ctx.getPackageManager()) != null) {
             ctx.startActivity(intent);
         }
+    }
+
+    public static boolean isFirstLike(User user) {
+//        String myId = DataManager.getInstance().getPreferencesManager().getUserId();
+//        List<Like> userLikes = user.getLikes();
+//        for (Like like : userLikes) {
+//            if (like.getId() == myId) return true;
+//        }
+        return true;
     }
 }

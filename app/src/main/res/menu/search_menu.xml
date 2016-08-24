@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<item
-    android:id="@+id/search_action"
-    android:title="@string/search.title"
-    app:showAsAction="ifRoom"
-    app:actionViewClass="android.widget.SearchView"/>
+    <item
+        android:id="@+id/search_action"
+        android:title="@string/search.title"
+        app:showAsAction="ifRoom"
+        app:actionViewClass="android.widget.SearchView"/>
+    <item
+        android:id="@+id/lines_action"
+        android:title="@string/search.lines_title"
+        app:showAsAction="ifRoom"
+        app:actionViewClass="android.widget.SearchView"/>
+    <item
+        android:id="@+id/rating_action"
+        android:title="@string/search.rating_title"
+        app:showAsAction="ifRoom"
+        app:actionViewClass="android.widget.SearchView"/>
+    <item
+        android:id="@+id/projects_action"
+        android:title="@string/search.projects_title"
+        app:showAsAction="ifRoom"
+        app:actionViewClass="android.widget.SearchView"/>
+    <item
+        android:id="@+id/likes_action"
+        android:title="@string/search.likes_title"
+        app:showAsAction="ifRoom"
+        app:actionViewClass="android.widget.SearchView"/>
 </menu>
