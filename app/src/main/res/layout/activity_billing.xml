@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/match">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        style="@style/fill"
+        android:background="@color/blue">
+        <android.support.v7.widget.Toolbar
+            android:theme="@style/AppTheme.PopupOverlay"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:titleTextColor="@color/white"
+            app:layout_collapseMode="pin"/>
+    </android.support.design.widget.AppBarLayout>
+
+    <EditText
+        android:id="@+id/sum_et"
+        style="@style/fill"
+        android:layout_below="@id/appbar_layout"
+        android:layout_marginTop="@dimen/spacing_normal_16"
+        android:layout_marginLeft="@dimen/spacing_normal_16"
+        android:layout_marginBottom="@dimen/spacing_normal_16"
+        android:layout_marginRight="@dimen/spacing_normal_16"
+        android:hint="@string/billing.sum_hint"/>
+
+    <RadioGroup
+        android:id="@+id/radio_btn"
+        style="@style/fill"
+        android:layout_below="@+id/sum_et"
+        android:layout_marginLeft="@dimen/spacing_normal_16"
+        android:layout_marginStart="@dimen/spacing_normal_16"
+        android:layout_marginBottom="@dimen/spacing_normal_16"
+        android:padding="@dimen/spacing_small_8">
+        <RadioButton
+            android:id="@+id/bank_card_btn"
+            style="@style/fill"
+            android:text="@string/billing.bank_card"
+            android:checked="true"/>
+        <RadioButton
+            android:id="@+id/yandex_btn"
+            style="@style/fill"
+            android:text="@string/billing.yandex"/>
+    </RadioGroup>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/AppTheme.Button.Red"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/radio_btn"
+        android:layout_marginRight="@dimen/spacing_normal_16"
+        android:layout_marginEnd="@dimen/spacing_normal_16"
+        android:text="@string/billing.send_btn"
+        android:onClick="sendPaymentInfo"/>
+</RelativeLayout>

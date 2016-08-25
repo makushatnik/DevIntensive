@@ -319,9 +319,8 @@ public class MainActivity extends BaseActivity {
     }
 
     private void openMoneySystem() {
-        //Now simple implemented.
-        //TODO Change to AlertBuilder
-        showToast("ЯД 41001276984788");
+        Intent i = new Intent(this, BillingActivity.class);
+        startActivityForResult(i, ConstantManager.REQUEST_PAYMENT);
     }
 
     private void createNotification() {

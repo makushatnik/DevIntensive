@@ -69,4 +69,11 @@
     <string name="settings.check_fields">Проверка полей</string>
     <string name="settings.check_fields_summary">Проверка полей профиля на корректность перед сохранением</string>
     <string name="settings.other">Другие настройки</string>
+
+    <string name="billing.title">Оплата</string>
+    <string name="billing.bank_card">Банковской картой</string>
+    <string name="billing.yandex">Яндекс кошелек</string>
+    <string name="billing.send_btn">Оплатить</string>
+    <string name="billing.sum">Сумма к оплате</string>
+    <string name="billing.sum_hint">Сумма</string>
 </resources>

@@ -35,17 +35,18 @@
         android:title="@string/user_profile.send_money"/>
 
 </group>
-    <group>
-        <item
-            android:id="@+id/settings_menu"
-            android:checkable="true"
-            android:icon="@drawable/ic_settings_black_24dp"
-            android:title="@string/user_profile.settings"/>
-    </group>
-    <group>
-        <item
-            android:id="@+id/logout_menu"
-            android:icon="@drawable/ic_exit_to_app_black_24dp"
-            android:title="@string/user_profile.logout"/>
-    </group>
+    <item
+        android:title="@string/user_profile.settings">
+        <menu>
+            <item
+                android:id="@+id/settings_menu"
+                android:checkable="true"
+                android:icon="@drawable/ic_settings_black_24dp"
+                android:title="@string/user_profile.settings"/>
+            <item
+                android:id="@+id/logout_menu"
+                android:icon="@drawable/ic_exit_to_app_black_24dp"
+                android:title="@string/user_profile.logout"/>
+        </menu>
+    </item>
 </menu>

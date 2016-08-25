@@ -32,6 +32,11 @@
             android:label="@string/app_name">
 
         </activity>
+        <activity android:name=".ui.activities.BillingActivity"
+            android:label="@string/billing.title"
+            android:parentActivityName=".ui.activities.MainActivity">
+
+        </activity>
         <activity
             android:name=".ui.activities.SplashActivity"
             android:label="Business Card">
