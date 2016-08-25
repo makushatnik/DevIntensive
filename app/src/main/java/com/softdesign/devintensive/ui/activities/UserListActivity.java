@@ -76,6 +76,7 @@ public class UserListActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
+
         if (itemId == R.id.home) {
             mNavigationDrawer.openDrawer(GravityCompat.START);
         } else if (itemId == R.id.lines_action) {
@@ -130,8 +131,6 @@ public class UserListActivity extends BaseActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search_menu, menu);
-
         mSearchItem = menu.findItem(R.id.search_action);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
         searchView.setQueryHint(getString(R.string.search_query_hint));
@@ -157,8 +156,15 @@ public class UserListActivity extends BaseActivity {
                 return false;
             }
         });
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.search_menu, menu);
         return true;
-        //return super.onPrepareOptionsMenu(menu);
     }
 
     private void showUsers(List<User> users) {
